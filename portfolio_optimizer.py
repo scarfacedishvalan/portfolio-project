@@ -122,7 +122,8 @@ class PortfolioOptimizer:
         # Bounds: weights between 0 and 1
         if bounds is None:
             bounds = tuple((0.001, 1) for _ in range(num_investments))
-            
+        if isinstance(bounds, dict):
+            bounds = tuple((bounds.get("min_value", 0), bounds.get("max_value", 1)) for _ in range(num_investments))
         bounds = self.adjust_weights(bounds)
         if optimizer == "sr":
             optimizer_func = lambda wts: -1*self.calculate_sharpe_ratio(wts)

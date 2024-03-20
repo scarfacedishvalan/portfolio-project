@@ -26,10 +26,13 @@ START_YR = 2007
 
 
 TABLE_SETTINGS_DICT = {"stats_table": dict (   
-    show_cols = ["Investment", 'total_return', 'cagr', 'max_drawdown', 'calmar', "daily_mean", "daily_vol", "daily_sharpe"],
+    show_cols = ["Investment", 'total_return', 'cagr', 'max_drawdown', 'calmar', "yearly_mean", "yearly_vol", "yearly_sharpe"],
     columns_data_config = {"cagr": {'specifier': '.2%'}, "max_drawdown": {'specifier': '.2%'}, "daily_mean": {'specifier': '.2%'}, 
                             "daily_vol": {'specifier': '.2%'}, "total_return": {'specifier': ',.2f'}, "calmar": {'specifier': ',.2f'},
-                            "daily_sharpe": {'specifier': ',.2f'}}
+                            "daily_sharpe": {'specifier': ',.2f'}, 
+                            "yearly_vol": {'specifier': '.2%'},
+                            "yearly_sharpe": {'specifier': ',.2f'},
+                            "yearly_mean": {'specifier': '.2%'}}
                             )
     }
 
@@ -43,7 +46,7 @@ def generate_table(dataframe, idname, show_columns, columns_data_config, cellwid
     hidden_cols = [col for col in dataframe.columns if col not in show_columns]
     columns = []
     for col in dataframe.columns:
-        d = {'name': col, 'id': col}
+        d = {'name': col, 'id': col, "hideable": True}
         if col in columns_data_config:
             d.update({'type': 'numeric', 'format': columns_data_config.get(col, None)})
         columns.append(d)

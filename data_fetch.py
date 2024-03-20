@@ -8,7 +8,7 @@ from numpy.linalg import multi_dot
 import yfinance as yf
 import plotly.graph_objects as go
 
-RAW_PRICE_DATAPATH = r"C:\Python\Commercial_Dashboard\price_data.xlsx"
+RAW_PRICE_DATAPATH = "price_data.xlsx"
 
 class PriceData:
     def __init__(self, df = None, periods = 365, asset_list = None):

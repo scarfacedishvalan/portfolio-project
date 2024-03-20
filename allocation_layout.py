@@ -81,7 +81,7 @@ all_assets = list(PriceData()._dfraw.columns)
 asset_dropdown = dcc.Dropdown(
     id="asset_dropdown",
     options=[{"label": asset, "value": asset} for asset in all_assets],
-    value=all_assets[:2],  # Set default selected assets
+    value=["NIFTYBEES", "CPSEETF", "JUNIORBEES", "MON100", "MOM100"],  # Set default selected assets
     multi=True,
      style=asset_dropdown_width,
 )
@@ -89,7 +89,7 @@ asset_dropdown = dcc.Dropdown(
 asset_dropdown_bt = dcc.Dropdown(
     id="asset_dropdown_bt",
     options=[{"label": asset, "value": asset} for asset in all_assets],
-    value=all_assets[:2],  # Set default selected assets
+    value=["NIFTYBEES", "CPSEETF", "JUNIORBEES", "MON100", "MOM100"],  # Set default selected assets
     multi=True,
      style=asset_dropdown_width,
 )

@@ -24,6 +24,8 @@ def iso8601_to_pandas_offset(duration):
         raise ValueError("Invalid ISO 8601 duration format")
 
 def handle_bounds(input_data):
+    if isinstance(input_data, dict):
+        return input_data
     if isinstance(input_data, tuple):
         if all(isinstance(item, tuple) for item in input_data):
             return input_data
@@ -77,6 +79,7 @@ class MPTOptimiser(Algo):
         self.lookback = iso8601_to_pandas_offset(lookback)
         self.lag = pd.DateOffset(days=lag)
         self.bounds = handle_bounds(bounds)
+        print("Bounds = " + str(self.bounds))
         self.covar_method = covar_method
         self.rf = rf
         self.returns_period = returns_period

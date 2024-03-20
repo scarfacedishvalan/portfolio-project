@@ -125,9 +125,9 @@ if __name__ == "__main__":
     # data = bt.get('spy,agg', start='2010-01-01')
     data = pricedata._dfraw[chosen_assets]
     res = strategy_runner(data=data, recipe=recipe)
-    trdict = bth.get_transactions_dfdict(res)
-    dfstats = bth.get_all_stats_df(res)
-    heatmap_dict = bth.get_returns_heatmaps(res)
+    # trdict = bth.get_transactions_dfdict(res)
+    # dfstats = bth.get_all_stats_df(res)
+    # heatmap_dict = bth.get_returns_heatmaps(res)
     # Run strategies
     # "bounds": [[0.05,1], [0.05,1],[0.05,1],[0.05,1],[0.05,1],[0.05,1]],
     # new_recipe = handle_recipe_dict(recipe)
