@@ -10,6 +10,12 @@ def get_weights_df(backtest):
         weights_df[col] = pos_df[col]/dfall
     return weights_df
 
+def get_holdings_df(backtest):
+    pos_df = backtest.data.copy()
+    for col in pos_df.columns:
+        pos_df[col] = backtest.strategy.children[col].__dict__["data"]["position"]
+    return pos_df
+
 def get_transactions_dfdict(res):
     dfdict = {}
     for backtest in res.backtest_list:
@@ -17,14 +23,17 @@ def get_transactions_dfdict(res):
         weights_df = backtest.__dict__["_sweights"]
         if weights_df is None:
             weights_df = get_weights_df(backtest)
+        pos_df = get_holdings_df(backtest=backtest)
         dfw = pd.DataFrame(weights_df.stack().rename_axis(['Date', 'Security']))
+        dfh = pd.DataFrame(pos_df.stack().rename_axis(['Date', 'Security']))
         dfw.columns = ["weights"]
+        dfh.columns = ["Positions (With Notional 1e6)"]
         tr = backtest.strategy.get_transactions()
         dfp = backtest.strategy.prices.copy()
         
         dfp = dfp.reset_index().rename(columns={"index": "Date"})
         dfp.columns = ["Date", "pfolio_value"]
-        dfc = tr.join(dfw).reset_index()
+        dfc = tr.join(dfw).join(dfh).reset_index()
         dftrc = pd.merge(dfc,  dfp, on="Date")
         dftrc["asset_value"] = dftrc["weights"]*dftrc["pfolio_value"]
         dftrc = dftrc.set_index(["Date", "Security"]).drop(["quantity"], axis=1)
@@ -59,3 +68,4 @@ def get_returns_heatmaps(res):
        data_df = res[strategy].__dict__["return_table"].round(2)
        heatmap_dict[strategy] = data_df
     return heatmap_dict 
+

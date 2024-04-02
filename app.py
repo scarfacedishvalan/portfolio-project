@@ -13,6 +13,19 @@ app = Dash(
 )
 
 
+cov_period = dbc.InputGroup(
+    [
+        dbc.InputGroupText("Covariance period"),
+        dbc.Input(
+            id="cov_period",
+            placeholder="Min 365",
+            type="text",
+            value=str(365*3),
+        ),
+    ],
+    className="mb-3",
+)
+
 app.layout = overall_layout
 
 @app.callback(
@@ -25,7 +38,8 @@ def toggle_collapse(n_clicks, is_open):
         return not is_open
     return is_open
 
+
 app = get_all_callbacks(app)
 
 if __name__ == "__main__":
-    app.run_server(debug=True)
+    app.run_server(debug=False, host = "0.0.0.0", port = 8080)

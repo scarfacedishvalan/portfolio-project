@@ -10,11 +10,9 @@
                             "args": {
                                 "lookback" : "P3Y",
                                 "covar_method" : "standard",
-                                "rf": 0,
-                                "lag" : 0,
                                 "bounds": {"min_value": 0.05},                                
                                 "returns_period" : 365,
-                                "target_return" : [0.10],
+                                "target_return" : 0.10,
                                 "optimizer_func" : "sr"
                             }
                         },
@@ -27,40 +25,37 @@
             "select": "all",
             "RunAfterDate": "2015-12-24",
             "optimiser":
-                        {
+                        [
+                            {
                             "name": "MPTOptimiser",
                             "args": {
                                 "lookback" : "P3Y",
                                 "covar_method" : "standard",
-                                "rf": 0,
-                                "lag" : 0,
                                 "bounds": {"min_value": 0.05, "max_value": 0.5},                                
                                 "returns_period" : 365,
-                                "target_return" : [0.10],
+                                "target_return" : [0.10, 0.2],
                                 "optimizer_func" : "sr"
+                                }
                             }
-                        },
+                    ],
             "rebalance": true
 
         },
-    "Yearly_min_var": 
+    "weighmeanvar": 
         {
             "rebalance_freq": "RunYearly",
             "select": "all",
             "RunAfterDate": "2015-12-24",
             "optimiser":
-                        {
-                            "name": "MPTOptimiser",
+                        [
+                            {
+                            "name": "WeighMeanVar",
                             "args": {
                                 "lookback" : "P3Y",
-                                "covar_method" : "standard",
-                                "rf": 0,
-                                "lag" : 0,
-                                "returns_period" : 365,
-                                "target_return" : [0.10],
-                                "optimizer_func" : "sd"
+                                "covar_method" : "standard"
+                                }
                             }
-                        },
+                        ],
             "rebalance": true
 
         }

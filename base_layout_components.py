@@ -1,7 +1,7 @@
 from dash import Dash, dcc, html, dash_table, Input, Output, State, callback_context, ALL, no_update
 import dash_bootstrap_components as dbc
 import plotly.graph_objects as go
-from json_recipe_handler import load_json_recipe, handle_recipe_dict
+from json_recipe_handler import load_json_recipe, handle_recipe_dict, recipe_details_to_df
 import json
 from dash import dash_table
 import plotly.express as px
@@ -50,6 +50,7 @@ def generate_table(dataframe, idname, show_columns, columns_data_config, cellwid
         if col in columns_data_config:
             d.update({'type': 'numeric', 'format': columns_data_config.get(col, None)})
         columns.append(d)
+
     return dash_table.DataTable(
         id=idname,
         columns=columns,
@@ -59,6 +60,33 @@ def generate_table(dataframe, idname, show_columns, columns_data_config, cellwid
         style_cell={'width': cellwidth},
         sort_action='native'
     )
+
+def normal_auto_adjust_table(dataframe, idname, show_columns, columns_data_config, **kwargs):
+    hidden_cols = [col for col in dataframe.columns if col not in show_columns]
+    columns = []
+    for col in dataframe.columns:
+        d = {'name': col, 'id': col, "hideable": True}
+        if col in columns_data_config:
+            d.update({'type': 'numeric', 'format': columns_data_config.get(col, None)})
+        columns.append(d)
+    params = dict(style_data={
+                        'whiteSpace': 'normal',
+                        'height': 'auto',
+                    },
+                    data=dataframe.to_dict('records'),
+                    columns=columns,
+                    id=idname)
+    params.update(kwargs)
+    return dash_table.DataTable(**params)
+
+def get_recipe_table(recipe_dict = None):
+    if recipe_dict is None:
+        recipe = load_json_recipe("recipe.json")
+        recipe_dict = handle_recipe_dict(recipe)
+    dfr = recipe_details_to_df(recipe_dict)
+    table = normal_auto_adjust_table(dfr, idname="recipe-table", show_columns=list(dfr.columns), columns_data_config=[])
+    return table
+
 def get_sample_dfs():
     sample_dfstats = pd.DataFrame({
         "Investment": ["Asset A", "Asset B", "Asset C"],

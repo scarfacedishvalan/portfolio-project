@@ -9,7 +9,7 @@ from base_layout_components import generate_table
 import btest_helpers as bth
 import json
 import json_recipe_handler as jrh
-from base_layout_components import create_stats_container
+from base_layout_components import create_stats_container, get_recipe_table
 
 def get_all_callbacks(app):
 
@@ -90,7 +90,7 @@ def get_all_callbacks(app):
             return [no_update, no_update, no_update]
 
     @app.callback(
-    [Output('recipe-store', 'data'), Output('recipe-validation-message', "children")],
+    [Output('recipe-store', 'data'), Output('recipe-validation-message', "children"), Output("recipe-table-placeholder", "children")],
     [Input('validate-recipe-button', 'n_clicks')],
     [State('json-recipe-input', 'value')]
     )
@@ -102,12 +102,13 @@ def get_all_callbacks(app):
             try:
                 recipe_dict = jrh.handle_recipe_dict(recipe)
                 all_strat = jrh.get_all_strategies(recipe_dict)
+                recipe_table = get_recipe_table(recipe_dict = recipe_dict)
                 print(recipe_dict)
-                return [recipe, ""]
+                return [recipe, "", recipe_table]
             except Exception as e:
-                return [{}, "Error loading recipe: " + str(e)]
+                return [{}, "Error loading recipe: " + str(e), no_update]
         else:
-            return [{}, no_update]
+            return [{}, no_update, no_update]
     # @app.callback(
     #     Output('asset-bounds-container', 'children'),
     #     Input('add-button', 'n_clicks'),

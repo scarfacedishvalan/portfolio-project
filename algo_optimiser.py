@@ -65,21 +65,21 @@ class MPTOptimiser(Algo):
 
     def __init__(
         self,
-        lookback="P3Y",
+        lookback=pd.DateOffset(years=3),
         bounds=None,
         covar_method="standard",
         rf=0.0,
-        lag=0,
+        lag=pd.DateOffset(days=0),
         returns_period = 1,
         ann_factor = None,
         target_return = None,
         optimizer_func = "sr"
     ):
         super(MPTOptimiser, self).__init__()
-        self.lookback = iso8601_to_pandas_offset(lookback)
-        self.lag = pd.DateOffset(days=lag)
-        self.bounds = handle_bounds(bounds)
-        print("Bounds = " + str(self.bounds))
+        self.lookback = lookback
+        self.lag = lag
+        self.bounds = bounds
+        # print("Bounds = " + str(self.bounds))
         self.covar_method = covar_method
         self.rf = rf
         self.returns_period = returns_period

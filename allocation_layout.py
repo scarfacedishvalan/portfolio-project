@@ -2,16 +2,16 @@ from dash import Dash, dcc, html, dash_table, Input, Output, State, callback_con
 import dash_bootstrap_components as dbc
 import plotly.graph_objects as go
 import pandas as pd
-import about
-from base_layout_components import start_amount, start_year, number_of_years, end_amount, rate_of_return, footer, collapsible_inputs_bt, create_stats_container
+from base_layout_components import start_amount, start_year, number_of_years, end_amount, rate_of_return, footer, collapsible_inputs_bt, create_stats_container, get_recipe_table
 from data_fetch import PriceData
 import dash_daq as daq
+
 
 app_description = """
 How does asset allocation affect portfolio performance?   Select the percentage of stocks, bonds and cash
  in a portfolio and see annual returns over any time period from 1928 to 2021.
 """
-app_title = "Asset Allocation Visualizer"
+app_title = "Asset Allocation Visualisation and Backtesting"
 app_image = "https://www.wealthdashboard.app/assets/app.png"
 
 metas = [
@@ -151,11 +151,32 @@ run_bt_row = dbc.Container(
     ],
     fluid=True,
 )
+
+nav_item_bt = dbc.Row(
+    dbc.Col(
+        dbc.NavItem(
+            dbc.NavLink(
+                'Creating and Interpreting JSON backtesting recipes',
+                href='https://abhirakshit.atlassian.net/l/cp/WjqgAF5s',
+                external_link= True,
+                target='_blank',
+                style={'color': 'blue', 'border': '1px solid blue', 'padding': '10px'}
+            )
+        ),
+        width=2  # One-third of the total width
+    )
+)
+
 bt_layout = html.Div(children=[
      backtesting_text,
+     html.Br(),
+      html.Br(),
+    nav_item_bt,
+     html.Br(),
      html.Div(children = [collapsible_inputs_bt]),
      html.Br(),
      html.Br(),
+     html.Div(id = "recipe-table-placeholder", children = [ get_recipe_table()]),
      html.Br(),
      html.Br(),
      html.H5("Choose assets for backtesting"),
@@ -266,6 +287,7 @@ overall_layout = dbc.Container(
             ],
             className="my-4",
         ),
+
         dbc.Row(dbc.Col(footer)),
         # dbc.Row(dbc.Col(about.card, width="auto"), justify="center")
     ],
