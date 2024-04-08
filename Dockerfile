@@ -1,5 +1,5 @@
 #Using python
-FROM python:3.8.7
+FROM python:3.9.7
 # Using Layered approach for the installation of requirements
 COPY requirements.txt ./requirements.txt
 RUN pip install -r requirements.txt
