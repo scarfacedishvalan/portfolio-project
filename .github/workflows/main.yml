@@ -27,7 +27,7 @@ jobs:
       - name: Building ()
         run: |-
           gcloud builds submit \
-            --tag gcr.io/stone-goal-401904/portfolio-project
+            --tag gcr.io/stone-goal-401904/portfolio-project --project=stone-goal-401904
 
       # Setup gcloud CLI
       - name: Deploy ()
