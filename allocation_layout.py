@@ -6,7 +6,6 @@ from base_layout_components import start_amount, start_year, number_of_years, en
 from data_fetch import PriceData
 import dash_daq as daq
 
-
 app_description = """
 How does asset allocation affect portfolio performance?   Select the percentage of stocks, bonds and cash
  in a portfolio and see annual returns over any time period from 1928 to 2021.
@@ -52,6 +51,8 @@ tooltip_styling={
         "placement": "bottom",
     }
 prices_graph_style = {'height': '800px', 'width': '2000px'}
+
+test_str = "ETF List: "
 
 
 
@@ -169,6 +170,7 @@ nav_item_bt = dbc.Row(
 
 bt_layout = html.Div(children=[
      backtesting_text,
+    # html.Div(children = [test_str]),
      html.Br(),
       html.Br(),
     nav_item_bt,

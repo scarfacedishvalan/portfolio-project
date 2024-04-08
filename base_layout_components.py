@@ -61,6 +61,19 @@ def generate_table(dataframe, idname, show_columns, columns_data_config, cellwid
         sort_action='native'
     )
 
+def generate_html_component(component_id):
+    # Read configuration file
+    with open('config.json', 'r') as config_file:
+        config = json.load(config_file)
+    
+    # Fetch text content for the given component ID
+    text_content = config.get(component_id, f"No text found for component {component_id}")
+    
+    # Generate HTML div component
+    html_component = html.Div
+    
+    return html_component
+
 def normal_auto_adjust_table(dataframe, idname, show_columns, columns_data_config, **kwargs):
     hidden_cols = [col for col in dataframe.columns if col not in show_columns]
     columns = []

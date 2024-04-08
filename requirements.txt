@@ -20,6 +20,8 @@ ffn==1.0.1
 Flask==3.0.2
 fonttools==4.50.0
 frozendict==2.4.1
+gcsfs
+google-cloud-storage
 html5lib==1.1
 idna==3.6
 importlib_metadata==7.1.0
