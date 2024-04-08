@@ -22,6 +22,7 @@ if __name__ == "__main__":
         credentials_dict
     )
     dst = r"C:\Python\data\etf_data"
+    
     # storage_client = storage.Client(credentials=credentials, project='stone-goal-401904')
     # bucket = client.get_bucket('price-data-etf')
     # for filename in os.listdir(dst):
