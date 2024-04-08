@@ -22,8 +22,6 @@ jobs:
       - name: Setting up
         uses: google-github-actions/setup-gcloud@v2
         with:
-          service_account_key: ${{ secrets.GCP_SA_KEY_JSON }}
-          service_account_email: "508722146308-compute@developer.gserviceaccount.com"
           project_id: stone-goal-401904
 
       - name: Building ()
@@ -33,10 +31,9 @@ jobs:
 
       # Setup gcloud CLI
       - name: Deploy ()
-        uses: google-github-actions/deploy-cloudrun@main
+        uses: google-github-actions/deploy-cloudrun@v2
         with:
           service: portfolio-project
           image: gcr.io/stone-goal-401904/portfolio-project
           region: asia-northeast1
-          credentials: ${{ secrets.GCP_SA_KEY_JSON }}
           project_id: stone-goal-401904
