@@ -1,32 +1,38 @@
 # .github/workflows/deploy.yml
-name: Deploy to Cloud Run
+name: Deploy Cloud Run 
 on:
   push:
     branches:
       - main
-env:
-  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-  APP_ID: portfolio-project
-  RUN_REGION: asia-northeast1
-  SA_KEY_JSON: ${{ secrets.GCP_SA_KEY_JSON }}
 jobs:
   deploy:
-    name: Deploy to Cloud Run
+    name: Deploying  Clima
     runs-on: ubuntu-latest
-    if: "contains(github.event.head_commit.message, 'to deploy')"
+    if: "github.event.head_commit.message, 'to deploy'"
     steps:
-      - uses: actions/checkout@v2
-
-      # Setup gcloud CLI
-      - uses: GoogleCloudPlatform/github-actions/setup-gcloud@main
-        with:
-          version: "290.0.1"
-          service_account_key: ${{ secrets.GCP_SA_KEY_JSON }}
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
+      - name: Checkout
+        uses: actions/checkout@v2
 
       # Build and push image to Google Container Registry
-      - name: Build
-        run: gcloud builds submit --tag gcr.io/stone-goal-401904/portfolio-project  --project=stone-goal-401904
+      - name: Setting up
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          version: '286.0.0'
+          service_account_key: ${{ secrets.GCP_SA_KEY_JSON }}
+          service_account_email: "YOUR_EMAIL"
+          project_id: YOUR_PROJECT_ID
 
-      - name: Deploy
-        run: gcloud run deploy --image gcr.io/stone-goal-401904/portfolio-project --platform managed  --project=stone-goal-401904 --allow-unauthenticated
+      - name: Building ()
+        run: |-
+          gcloud builds submit \
+            --tag gcr.io/stone-goal-401904/portfolio-project
+
+      # Setup gcloud CLI
+      - name: Deploy ()
+        uses: google-github-actions/deploy-cloudrun@main
+        with:
+          service: portfolio-project
+          image: gcr.io/stone-goal-401904/portfolio-project
+          region: asia-northeast1
+          credentials: ${{ secrets.GCP_SA_KEY_JSON }}
+          project_id: stone-goal-401904
