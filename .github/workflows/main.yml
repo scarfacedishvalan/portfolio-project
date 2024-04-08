@@ -6,7 +6,7 @@ on:
       - main
 jobs:
   deploy:
-    name: Deploying  Clima
+    name: Deploying portfolio app
     runs-on: ubuntu-latest
     if: "contains(github.event.head_commit.message, 'to deploy')"
     steps:
@@ -19,8 +19,8 @@ jobs:
         with:
           version: '286.0.0'
           service_account_key: ${{ secrets.GCP_SA_KEY_JSON }}
-          service_account_email: "YOUR_EMAIL"
-          project_id: YOUR_PROJECT_ID
+          service_account_email: "508722146308-compute@developer.gserviceaccount.com"
+          project_id: stone-goal-401904
 
       - name: Building ()
         run: |-
