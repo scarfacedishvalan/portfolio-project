@@ -30,10 +30,12 @@ jobs:
             --tag gcr.io/stone-goal-401904/portfolio-project --project=stone-goal-401904
 
       # Setup gcloud CLI
+      # uses: google-github-actions/deploy-cloudrun@v2
+        # with:
+        #   service: portfolio-project
+        #   image: gcr.io/stone-goal-401904/portfolio-project
+        #   region: asia-northeast1
+        #   project_id: stone-goal-401904
       - name: Deploy ()
-        uses: google-github-actions/deploy-cloudrun@v2
-        with:
-          service: portfolio-project
-          image: gcr.io/stone-goal-401904/portfolio-project
-          region: asia-northeast1
-          project_id: stone-goal-401904
+        run: |-
+          gcloud run deploy --image gcr.io/stone-goal-401904/portfolio-project --platform managed  --project=stone-goal-401904 --allow-unauthenticated
