@@ -1,13 +1,9 @@
-FROM python:3.9.7
-
-# Copy local code to the container image.
-ENV APP_HOME /app
-WORKDIR $APP_HOME
-COPY . ./
-
-# Install production dependencies.
+#Using python
+FROM python:3.9-slim
+# Using Layered approach for the installation of requirements
+COPY requirements.txt ./requirements.txt
 RUN pip install -r requirements.txt
-
-EXPOSE 8080
-
-CMD python app.py
+#Copy files to your container
+COPY . ./
+#Running your APP and doing some PORT Forwarding
+CMD gunicorn -b 0.0.0.0:80 app:server
