@@ -87,7 +87,28 @@ def get_all_callbacks(app):
             else:
                 return [no_update, no_update, no_update]
         else:
-            return [no_update, no_update, no_update]
+            assets_weights = [{asset: weight/100} for asset, weight in zip(selected_assets, current_values)]
+            if not assets_weights:
+                return [no_update, no_update, no_update]
+            if abs(sum(current_values) - 100) < 1e-4:
+                pricedata = PriceData(asset_list=selected_assets)
+                pplot = PortfolioPlot(pricedata_obj=pricedata)
+                wt_dict = {k: v for d in assets_weights for k, v in d.items()}
+                wt_arr = np.array([wt_dict[asset] for asset in selected_assets])
+                fig, res = pplot.plot_value_data_df(plot_assets=show_assets_bool, weights=wt_arr)
+                # Return the list of assets and weights to be stored
+                print(assets_weights)
+                prev_cols = list(res.stats.transpose().columns)
+                dfstats = res.stats.transpose().reset_index()
+                dfstats.columns = ["Investment"] + prev_cols
+                show_cols = ["Investment", 'total_return', 'cagr', 'max_drawdown', 'calmar', "daily_mean", "daily_vol", "daily_sharpe"]
+                columns_data_config = {"cagr": {'specifier': '.2%'}, "max_drawdown": {'specifier': '.2%'}, "daily_mean": {'specifier': '.2%'}, 
+                                       "daily_vol": {'specifier': '.2%'}, "total_return": {'specifier': ',.2f'}, "calmar": {'specifier': ',.2f'},
+                                        "daily_sharpe": {'specifier': ',.2f'}}
+                stat_table = generate_table(dfstats, idname="price_stats", show_columns=show_cols, columns_data_config=columns_data_config)
+                return [assets_weights, fig, stat_table]
+            else:
+                return [no_update, no_update, no_update]
 
     @app.callback(
     [Output('recipe-store', 'data'), Output('recipe-validation-message', "children"), Output("recipe-table-placeholder", "children")],
@@ -108,7 +129,7 @@ def get_all_callbacks(app):
             except Exception as e:
                 return [{}, "Error loading recipe: " + str(e), no_update]
         else:
-            return [{}, no_update, no_update]
+            return [no_update, no_update, no_update]
     # @app.callback(
     #     Output('asset-bounds-container', 'children'),
     #     Input('add-button', 'n_clicks'),
@@ -213,6 +234,20 @@ def get_all_callbacks(app):
                 statcontainer = []
             return [fig, statcontainer]
         else:
-            return [no_update, no_update]
+            if asset_list is None or not recipe:
+                return [no_update, no_update]
+            pricedata = PriceData(asset_list=asset_list)
+            data = pricedata._dfraw
+            res = jrh.strategy_runner(data, recipe)
+            fig = bth.plot_all_bt_results(res)
+            trdict = bth.get_transactions_dfdict(res)
+            dfstats = bth.get_all_stats_df(res)
+            heatmap_dict = bth.get_returns_heatmaps(res)
+            try:
+                statcontainer = create_stats_container(dfstats=dfstats, heatmap_dict=heatmap_dict, dftrc_dict = trdict, use_samples = False)
+            except Exception as e:
+                print(str(e))
+                statcontainer = []
+            return [fig, statcontainer]
 
     return app

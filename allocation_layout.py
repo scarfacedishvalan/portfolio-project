@@ -5,6 +5,7 @@ import pandas as pd
 from base_layout_components import start_amount, start_year, number_of_years, end_amount, rate_of_return, footer, collapsible_inputs_bt, create_stats_container, get_recipe_table
 from data_fetch import PriceData
 import dash_daq as daq
+from texts import get_text_content
 
 app_description = """
 How does asset allocation affect portfolio performance?   Select the percentage of stocks, bonds and cash
@@ -50,10 +51,14 @@ tooltip_styling={
         "always_visible": True,
         "placement": "bottom",
     }
-prices_graph_style = {'height': '800px', 'width': '2000px'}
-
+prices_graph_style = {'height': '800px', 'width': '2000px', 'border': '2px solid black'}
+general_style = {
+            'border': '2px solid black',  # Add a border
+            'background-color': 'lightblue',  # Change background color to light blue,
+            'padding': '20px'
+        }
 test_str = "ETF List: "
-
+hr_style = {'borderWidth': "5vh", "width": "100%"}
 
 
 asset_allocation_card = dbc.Card(asset_allocation_text, className="mt-2")
@@ -79,21 +84,23 @@ def get_slider_card(assetlist, values = None):
     return slider_list, values
 
 all_assets = list(PriceData()._dfraw.columns)
-asset_dropdown = dcc.Dropdown(
+ticker_mapping_df = pd.read_csv('gs://price-data-etf/configs/ticker_mapping.csv')
+name_dict = dict(zip(ticker_mapping_df["asset"].to_list(), ticker_mapping_df["name"].to_list()))
+asset_dropdown = html.Div(children = [dcc.Dropdown(
     id="asset_dropdown",
-    options=[{"label": asset, "value": asset} for asset in all_assets],
+    options=[{"label": name_dict[asset] + f" ({asset})", "value": asset} for asset in all_assets],
     value=["NIFTYBEES", "CPSEETF", "JUNIORBEES", "MON100", "MOM100"],  # Set default selected assets
     multi=True,
      style=asset_dropdown_width,
-)
+)], style=general_style)
 
-asset_dropdown_bt = dcc.Dropdown(
+asset_dropdown_bt = html.Div(children = [dcc.Dropdown(
     id="asset_dropdown_bt",
-    options=[{"label": asset, "value": asset} for asset in all_assets],
+    options=[{"label": name_dict[asset] + f" ({asset})", "value": asset} for asset in all_assets],
     value=["NIFTYBEES", "CPSEETF", "JUNIORBEES", "MON100", "MOM100"],  # Set default selected assets
     multi=True,
      style=asset_dropdown_width,
-)
+    )], style=general_style)
 
 slider_card = html.Div(
      children = [
@@ -169,22 +176,45 @@ nav_item_bt = dbc.Row(
 )
 
 bt_layout = html.Div(children=[
-     backtesting_text,
+     get_text_content("backtesting_1"),
+     html.Hr(style = hr_style),     
+      get_text_content("backtesting_2"),
+      html.Hr(style = hr_style),
+      get_text_content("backtesting_3"),
+      html.Hr(style = hr_style),
+      get_text_content("bt_algos_link"),
+      html.Hr(style = hr_style),
+      get_text_content("backtesting_4"),    
+      get_text_content("iso_link"),
     # html.Div(children = [test_str]),
      html.Br(),
       html.Br(),
-    nav_item_bt,
+    # nav_item_bt,
+    get_text_content("heading_bt"),
      html.Br(),
-     html.Div(children = [collapsible_inputs_bt]),
+     get_text_content("backtesting_5"),
+     html.Div(children = [collapsible_inputs_bt], style = general_style),
      html.Br(),
+     get_text_content("backtesting_5a"),
      html.Br(),
-     html.Div(id = "recipe-table-placeholder", children = [ get_recipe_table()]),
+     html.Hr(style=hr_style),
      html.Br(),
+         dcc.Loading(
+    id="loading5",
+    type="default",
+    children=[
+     html.Div(id = "recipe-table-placeholder", children = [ get_recipe_table()], style=general_style),
+    ]
+    ),
+
+     html.Hr(),
+     get_text_content("backtesting_6"),
      html.Br(),
-     html.H5("Choose assets for backtesting"),
-     html.Br(),
+    #  html.H5("Choose assets for backtesting"),
+    #  html.Hr(),
      asset_dropdown_bt,
      html.Br(),
+
      html.Br(),
 #      html.H5("Choose bounds"),
 #      html.Br(),
@@ -199,13 +229,30 @@ bt_layout = html.Div(children=[
     html.Br(),
     run_bt_row,
     html.Br(),
-    dcc.Graph(id="bt-graph", style= prices_graph_style),
-         html.Br(),
-     html.Br(),
-     html.H5("Portfolio Statistics"),
+    get_text_content("backtesting_7"),
+    dcc.Loading(
+    id="loading2",
+    type="default",
+    children=[
+        dcc.Graph(id="bt-graph", style= prices_graph_style),
+    ]
+    ),
+    
     html.Br(),
+    get_text_content("backtesting_8"),
      html.Br(),
+
+    #  html.H5("Portfolio Statistics"),
+    html.Br(),
+    html.Br(),
+    dcc.Loading(
+    id="loading2b",
+    type="default",
+    children=[
     html.Div(id = "bt_stats_container", children = [create_stats_container(use_samples=True)])
+    ]
+    ),
+
 ])
 
 
@@ -229,11 +276,24 @@ tabs = dbc.Tabs(
             # html.Div(id = "sum_value"),
             html.Br(),
             #  input_groups, time_period_card
-            dcc.Graph(id="prices-graph", style= prices_graph_style),
+             dcc.Loading(
+                id="loading1",
+                type="default",
+                children=[
+                    dcc.Graph(id="prices-graph", style= prices_graph_style)
+                ]
+            ),
             html.Br(),
             html.Br(),
             html.H5("Portfolio Stats"),
-            html.Div(id = "tab1-graphs-placeholder", children = [])
+            dcc.Loading(
+                id="loading1b",
+                type="default",
+                children=[
+                    html.Div(id = "tab1-graphs-placeholder", children = [])
+                ]
+            ),
+            
              ],
             tab_id="tab-2",
             label="Asset Allocation Analysis",

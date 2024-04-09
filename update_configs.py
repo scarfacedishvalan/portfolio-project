@@ -2,6 +2,15 @@ from google.cloud import storage
 import os
 import pandas as pd
 from read_from_gc import PriceDataGC
+import yfinance as yf
+
+def get_ticker_name(ticker):
+    yfobj = yf.Ticker(ticker)
+    try:
+        return yfobj.info["longName"]
+    except:
+        return yfobj.info["shortName"]
+    
 
 class ConfigGC:
     project_name = "stone-goal-401904"
@@ -18,6 +27,7 @@ class ConfigGC:
         df_config["ticker"] = all_tickers
         df_config["path"] = all_asset_paths
         df_config["source"] = "yfinance"
+        df_config["name"] = df_config["ticker"].apply(get_ticker_name)
         return df_config
     
     @classmethod

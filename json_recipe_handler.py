@@ -22,6 +22,9 @@ def generate_value_dict(data):
         optimiser_copy = optimiser.copy()
         
         args = optimiser_copy["args"]
+        if args == {}:
+            value_dict[optimiser["name"]] = {}
+            continue
         list_bool = False
         for key, value in args.items():
 

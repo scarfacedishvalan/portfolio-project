@@ -9,6 +9,7 @@ import pandas as pd
 import numpy as np
 import calendar
 from multiindex_table_create import multiindex_table
+from texts import get_text_content
 
 # Define the years and months
 
@@ -37,10 +38,10 @@ TABLE_SETTINGS_DICT = {"stats_table": dict (
     }
 
 HEATMAPS_STYLE = {'width': '1000px', 'height': '800px'}
-ALL_STATS_HEADING = html.H2("Backtest Stats", style={'textAlign': 'center'})
-BT_STATS_HEADING = html.H3("Strategy Summary Stats", style={'textAlign': 'center'})
-MONTHLY_RETURNS_HEADING = html.H3("Monthly Returns", style={'textAlign': 'center'})
-TRANSACTIONS_HEADING = html.H3("Transaction Value Details", style={'textAlign': 'center'})
+ALL_STATS_HEADING = html.Br()
+BT_STATS_HEADING = html.Br()
+MONTHLY_RETURNS_HEADING =  get_text_content("backtesting_9")
+TRANSACTIONS_HEADING =get_text_content("backtesting_10")
 
 def generate_table(dataframe, idname, show_columns, columns_data_config, cellwidth = '150px'):
     hidden_cols = [col for col in dataframe.columns if col not in show_columns]
@@ -282,7 +283,7 @@ json_str = json.dumps(recipe_json, indent=4)
 recipe_component = html.Div([
     html.H3("Strategy Recipe"),
     dcc.Textarea(id='json-recipe-input', value=json_str, style={'width': '100%', 'height': '300px'}),
-    html.Button('Validate Recipe', id='validate-recipe-button', n_clicks=0),
+    dbc.Button('Validate Recipe', id='validate-recipe-button', n_clicks=0),
     html.Div(id='recipe-validation-message'),
     dcc.Store(id='recipe-store', data=handle_recipe_dict(recipe_json))
 ])
