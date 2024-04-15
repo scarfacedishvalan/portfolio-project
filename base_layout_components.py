@@ -397,21 +397,19 @@ footer = html.Div(
 
 
 app_description = """
-How does asset allocation affect portfolio performance?   Select the percentage of stocks, bonds and cash
- in a portfolio and see annual returns over any time period from 1928 to 2021.
+How do we better allocate weights to a portfolio of assets. Although there are many ways to optimise your portfolio, this python based Plotly Dash app helps evaluate all the strategies and their combinations against real time NIFTY ETF data.
 """
 app_title = "Asset Allocation Visualizer"
 app_image = "https://www.wealthdashboard.app/assets/app.png"
 
 metas = [
     {"name": "viewport", "content": "width=device-width, initial-scale=1"},
+    {"name": "keywords", "content": "NIFTY India ETF, portfolio optimization, ETF data, investment strategies, finance tools, risk management, asset allocation, Indian stock market, stock exchange, diversified portfolio, asset management"},
     {"property": "twitter:card", "content": "summary_large_image"},
-    {"property": "twitter:url", "content": "https://www.wealthdashboard.app/"},
+    {"property": "twitter:url", "content": "https://www.optimarkov.com/"},
     {"property": "twitter:title", "content": app_title},
     {"property": "twitter:description", "content": app_description},
-    {"property": "twitter:image", "content": app_image},
     {"property": "og:title", "content": app_title},
     {"property": "og:type", "content": "website"},
     {"property": "og:description", "content": app_description},
-    {"property": "og:image", "content": app_image},
 ]

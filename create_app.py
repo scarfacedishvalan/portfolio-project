@@ -17,6 +17,7 @@ def create_app():
 
     app.layout = html.Div([
         # represents the browser address bar and doesn't render anything
+        html.H1("Optimal Strategies for Portfolio Allocation"),
         dcc.Location(id='url', refresh=False),
         html.Div(id='page-content', children = overall_bt_layout)
     ])
