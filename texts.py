@@ -1,9 +1,11 @@
 from dash import dcc, html
+import dash_bootstrap_components as dbc
 
 DEFAULT_TEXT_STYLING = {
         "fontSize": 18,
         "padding": 15,
         "text-align": "justify",
+        # 'border-bottom':'solid black 1px',
         "text-indent": 30,
         'width':'80%',
     }
@@ -12,11 +14,42 @@ ALL_TEXT_DICT = dict(
 
         asset_allocation_1 = dcc.Markdown(
             """
-        > **Asset allocation** is one of the main factors that drive portfolio risk and returns.   Play with the app and see for yourself!
-
-        > Change the allocation to different assets on the sliders and see how your portfolio performs over time in the graph. The weights must add up to 100, failing which an error will be thrown.
-          Click the update weights button to refresh the graph after changing the weights.
+        ### Asset Allocation and Weighed Portfolios
+        Asset allocation is the strategic distribution of investments among various asset classes such as stocks, bonds, and cash. It aims to balance risk and return by diversifying across different types of assets. 
+        Weighted portfolios further refine this approach by assigning specific proportions to each asset class based on factors like risk tolerance, time horizon, and investment objectives. By adjusting these weights, investors can tailor their portfolios to align with their financial goals and preferences. 
+        The goal is to achieve optimal risk-adjusted returns while minimizing exposure to undue market volatility. 
         """
+        ),
+
+        asset_allocation_1b = dcc.Markdown(
+            """
+        ### NIFTY ETF Price Data        
+        ETFs, or Exchange-Traded Funds, are investment funds traded on stock exchanges, much like individual stocks. They typically hold a diversified portfolio of assets such as stocks, bonds, commodities, or a combination thereof. ETFs offer investors exposure to a wide range of assets in a single investment, providing diversification and liquidity. They are designed to track the performance of an underlying index or asset class, offering transparency and low costs compared to traditional mutual funds. 
+        ETFs can be bought and sold throughout the trading day at market prices, making them a flexible and efficient investment vehicle for both retail and institutional investors. The underlying data for this app is sourced from > 30 ETFs traded on NIFTY, where the underlyings vary from top 50 market caps, midcaps, gold and many other sectoral indexes.
+
+        > To play with your portfolio, select assets from the dropdown below to view the actual historical Close data for the selected assets. 
+        """
+        ),
+        asset_allocation_1c = dcc.Markdown(
+            """
+
+        Choose the assets from the dropdown and from the generated sliders, change the allocation to different assets on the sliders and see how your portfolio performs over time in the graph. The weights must add up to 100, failing which an error will be thrown.
+          Click the update weights button to refresh the graph after changing the weights
+
+        """
+        ),
+
+        asset_allocation_2 = dcc.Markdown(
+            """
+            The graph represents the value of the weighted portfolio based on the weights chosen above. Use the show assets toggle button to show the value of the assets as well over time. Please note the points in the graph represent the value over time for an amount of 100 invested initially.
+
+            """
+        ),
+        asset_allocation_3 = dcc.Markdown(
+            """
+            Below is the statistical summary of the performance of the weighted portfolio along with the assets.
+            
+            """
         ),
         backtesting_1 =  dcc.Markdown(
         """
@@ -72,7 +105,11 @@ MPT provides investors with a powerful tool to achieve efficient and effective i
         is the daily price data of chosen ETFs traded on India's NSE NIFTY. 
         
         The user inputs an intuitive json recipe that typically looks like this:
+        """
+        ),
 
+        backtesting_4b =  dcc.Markdown(
+        """
         ```
         {
         "WeighMeanStrategy": 
@@ -93,7 +130,10 @@ MPT provides investors with a powerful tool to achieve efficient and effective i
             },
         }
         ``` 
+        """ ),
 
+        backtesting_4c =  dcc.Markdown(
+        """
         #### Interpreting the recipe
 
         * ***WeighMeanStrategy*** is the name of a strategy chosen by user. The overall recipe can have multiple such strategies with different underlying params.
@@ -126,18 +166,28 @@ MPT provides investors with a powerful tool to achieve efficient and effective i
 bt_algos_link = html.Div([
     html.A("bt Algos API reference", href='https://pmorissette.github.io/bt/bt.html', target="_blank")
 ]),
-    
-heading_bt = html.H3("Backtesting with NIFTY ETF Data", style={'textAlign': 'center'}),
 
+# asset_alloc_link = dcc.Link('See Pricing Data', href='/assetalloc'),
+asset_alloc_link = html.A("Asset Allocation", href="/assetalloc", target = "_blank"),
+heading_bt = html.H3("Backtesting with NIFTY ETF Data", style={'textAlign': 'center'}),
+redirect_home =  html.A("Backtesting App", href="/"),
+backtesting_4d = dcc.Markdown(
+        """
+        The underlying data for this app is sourced from > 30 ETFs traded on NIFTY, where the underlyings vary from top 50 market caps, midcaps, gold and many other sectoral indexes. To see what the actual input ETF data looks like, click the below link to open the asset allocation visualiser.
+        """
+    ),
 backtesting_5 = dcc.Markdown(
         """
         Now we will perform backtests on actual NIFTY ETF data using the recipe method described above.
         Expand the collapsible component below and edit the json recipe. Once done, click ***Validate Recipe*** button to check if all the parameters are entered correctly. If not a message will be displaed indicating error.
+        
+        > To see what the actual input ETF data looks like, click the below link to open the asset allocation visualiser.
         """
     ),
 
 backtesting_5a = dcc.Markdown(
         """
+         ### Recipe Table
         This table indicates the different strategies, the optimisers and arguments that will run. This is based on the interpretation of the json recipe as described above.
         """
     ),
@@ -172,13 +222,28 @@ backtesting_9 = dcc.Markdown(
 backtesting_10 = dcc.Markdown(
         """
         ### Transations for rebalance
-        The below tables indicate what transactions at what prices were made to rebalance the portfolio to suit the desired strategies. This also helps assess which strategies have higher deltas and which ones are relatively stable.
+        Below is the pivot table with the data for the transaction that happen during rebalance for each strategy. The user can analyse dates of rebalance, asset prices, weights, portfolio values and their combinations using this pivot table.
         """
     ),
 
+backtesting_11 = dcc.Markdown(
+        """
+        ### Monthly Return Heatmaps and Drawdowns
+        > ***Monthly returns*** are helpful in analyzing portfolio performance as they offer insights into the fluctuations and trends over shorter time intervals. By examining monthly returns, investors can assess the effectiveness of their investment strategies, identify patterns and seasonality, if any. 
+        These returns provide a granular view of portfolio performance.
+
+        > A ***Drawdown*** in the context of portfolio performance refers to the decline in the value of an investment from its peak to its subsequent trough. 
+        It represents the extent of loss experienced by an investment or portfolio during a specific period. Monitoring drawdowns allows investors to assess the resilience of their portfolios during market downturns and turbulent periods. By understanding the magnitude and duration of drawdowns, investors can gauge the potential downside exposure of their investments and make informed decisions to mitigate risk.
+        Drawdown analysis helps investors set realistic expectations, manage their risk tolerance, and adjust their investment strategies accordingly.
+        
+        > Select strategy and respective metric (monthly returns/drawdowns) from the dropdowns below to check the strategy performance based on these metrics.
+        """
+    )
+
+
  )
 
-def get_text_content(text_id):
+def get_text_content(text_id, **kwargs):
     return html.Div(
     [
         ALL_TEXT_DICT[text_id]       

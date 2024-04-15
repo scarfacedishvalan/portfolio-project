@@ -1,30 +1,37 @@
-from pathlib import Path
-from dash import Dash, dcc, html, dash_table, Input, Output, State, callback_context, ALL, no_update
-import dash_bootstrap_components as dbc
-from base_layout_components import metas, app_title
-from allocation_layout import overall_layout
-from callbacks import get_all_callbacks
 import dash
-from dash import html
-import flask
+from dash import Dash, dcc, html, dash_table, Input, Output, State, callback_context, ALL, no_update
+from dash.dependencies import Input, Output
 import dash_bootstrap_components as dbc
+from texts import get_text_content
+from bt_layout import ALL_CARDS_DICT, HEADINGS_DICT
+from base_layout_components import metas, app_title
+from bt_callbacks import get_bt_callbacks
+from bt_layout import overall_bt_layout
+from pricing_layout import overall_pricing_layout
+from pricing_callbacks import get_pricing_callbacks
 
-HERE = Path(__file__).parent
+app = Dash(__name__)
 
-app = dash.Dash()
-
-# app.layout = html.A(dbc.Button("report"), href="/about", target="_blank")
 app.layout = html.Div([
-    html.A(dbc.Button("report"), href="/about", target="_blank"),
-    html.Div(id='page-content', children=[overall_layout]),
+    # represents the browser address bar and doesn't render anything
+    dcc.Location(id='url', refresh=False),
+
+    # dcc.Link('Navigate to "/"', href='/'),
+    # html.Br(),
+    # dcc.Link('Navigate to "/page-2"', href='/page-2'),
+
+    # content will be rendered in this element
+    html.Div(id='page-content', children = overall_bt_layout)
 ])
 
-app = get_all_callbacks(app)
 
-@app.server.route("/about")
-def get_report():
-    return flask.send_from_directory(HERE, "about-us.html")
+@app.callback(Output('page-content', 'children'), Input('url', 'pathname'))
+def display_page(pathname):
+    if pathname == "/assetalloc":
+        return overall_pricing_layout
+    else:
+        return overall_bt_layout
 
 
-if __name__ == "__main__":
-    app.run_server(debug=True)
+if __name__ == '__main__':
+    app.run(debug=True)

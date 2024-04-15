@@ -30,7 +30,7 @@ def generate_value_dict(data):
 
             if optimiser["name"] not in value_dict.keys():
                     value_dict[optimiser["name"]] = {}
-            if isinstance(value, list):                 
+            if isinstance(value, list) and key != "bounds":                 
                 value_dict[optimiser["name"]][key] = value
                 list_bool = True
         if not list_bool:
@@ -89,6 +89,19 @@ def iso8601_to_pandas_offset(duration):
         return offset
     else:
         raise ValueError("Invalid ISO 8601 duration format")
+def check_if_bound(iterable):
+    check_bool = True
+    if len(iterable) != 2:
+        check_bool = False
+    if not isinstance(iterable, list):
+        if not isinstance(iterable, tuple):
+            check_bool = False
+    try:
+        if iterable[0] < 0 or iterable[1] > 1:
+            check_bool = False
+    except:
+        check_bool = False
+    return check_bool
 
 def handle_bounds(input_data):
     if isinstance(input_data, dict):
@@ -97,6 +110,9 @@ def handle_bounds(input_data):
         if all(isinstance(item, tuple) for item in input_data):
             return input_data
     elif isinstance(input_data, list):
+        check_bool = check_if_bound(input_data)
+        if check_bool:
+            return tuple(input_data)
         if all(isinstance(item, tuple) for item in input_data):
             return tuple(input_data)
         elif all(isinstance(item, list) for item in input_data):
@@ -250,6 +266,9 @@ def recipe_details_to_df(data):
 
 if __name__ == "__main__":
     # Load JSON recipe
+    import os
+    credential_path = "C:\\Users\\abhir\\Downloads\\stone-goal-401904-364eb9bc2e42.json"
+    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credential_path
     import btest_helpers as bth
     recipe = load_json_recipe("recipe.json")
 
@@ -263,13 +282,18 @@ if __name__ == "__main__":
     # df_shares_opt_all = pbtest.get_backtest_data(target_returns=0.1)
 
     # data = bt.get('spy,agg', start='2010-01-01')
-    data = pricedata._dfraw[chosen_assets]
+    pricedata = PriceData(asset_list=chosen_assets)
+    data = pricedata._dfraw
     res = strategy_runner(data=data, recipe=recipe)
+    # trdict = bth.get_transactions_dfdict(res)
+    dfstats = bth.get_all_stats_df(res)
     # with open(r"bt_results.pickle", "wb") as output_file:
         # pickle.dump(res, output_file)
     # # dfr = recipe_details_to_df(handle_recipe_dict(recipe))
     # res_loaded = pickle.load(open("bt_results.pickle", "rb"))
     trdict = bth.get_transactions_dfdict(res)
+    dd = bth.get_drawdown_dict(res)
+    df = pd.concat([df for df in trdict.values()], ignore_index=True)
     # dfstats = bth.get_all_stats_df(res)
     # heatmap_dict = bth.get_returns_heatmaps(res)
     # Run strategies

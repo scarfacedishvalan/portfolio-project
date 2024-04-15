@@ -51,7 +51,7 @@ tooltip_styling={
         "always_visible": True,
         "placement": "bottom",
     }
-prices_graph_style = {'height': '800px', 'width': '2000px', 'border': '2px solid black'}
+prices_graph_style = {'height': '800px', 'width': '2500px', 'border': '2px solid black'}
 general_style = {
             'border': '2px solid black',  # Add a border
             'background-color': 'lightblue',  # Change background color to light blue,
@@ -177,13 +177,13 @@ nav_item_bt = dbc.Row(
 
 bt_layout = html.Div(children=[
      get_text_content("backtesting_1"),
-     html.Hr(style = hr_style),     
+    #  html.Hr(style = hr_style),     
       get_text_content("backtesting_2"),
-      html.Hr(style = hr_style),
+    #   html.Hr(style = hr_style),
       get_text_content("backtesting_3"),
-      html.Hr(style = hr_style),
+    #   html.Hr(style = hr_style),
       get_text_content("bt_algos_link"),
-      html.Hr(style = hr_style),
+    #   html.Hr(style = hr_style),
       get_text_content("backtesting_4"),    
       get_text_content("iso_link"),
     # html.Div(children = [test_str]),
@@ -197,7 +197,7 @@ bt_layout = html.Div(children=[
      html.Br(),
      get_text_content("backtesting_5a"),
      html.Br(),
-     html.Hr(style=hr_style),
+    #  html.Hr(style=hr_style),
      html.Br(),
          dcc.Loading(
     id="loading5",
@@ -207,7 +207,7 @@ bt_layout = html.Div(children=[
     ]
     ),
 
-     html.Hr(),
+    #  html.Hr(),
      get_text_content("backtesting_6"),
      html.Br(),
     #  html.H5("Choose assets for backtesting"),

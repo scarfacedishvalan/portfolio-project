@@ -27,7 +27,7 @@ START_YR = 2007
 
 
 TABLE_SETTINGS_DICT = {"stats_table": dict (   
-    show_cols = ["Investment", 'total_return', 'cagr', 'max_drawdown', 'calmar', "yearly_mean", "yearly_vol", "yearly_sharpe"],
+    show_cols = ["Strategy", 'total_return', 'cagr', 'max_drawdown', 'calmar', "yearly_mean", "yearly_vol", "yearly_sharpe"],
     columns_data_config = {"cagr": {'specifier': '.2%'}, "max_drawdown": {'specifier': '.2%'}, "daily_mean": {'specifier': '.2%'}, 
                             "daily_vol": {'specifier': '.2%'}, "total_return": {'specifier': ',.2f'}, "calmar": {'specifier': ',.2f'},
                             "daily_sharpe": {'specifier': ',.2f'}, 
@@ -43,11 +43,11 @@ BT_STATS_HEADING = html.Br()
 MONTHLY_RETURNS_HEADING =  get_text_content("backtesting_9")
 TRANSACTIONS_HEADING =get_text_content("backtesting_10")
 
-def generate_table(dataframe, idname, show_columns, columns_data_config, cellwidth = '150px'):
+def generate_table(dataframe, idname, show_columns, columns_data_config, cellwidth = '150px', hideable_bool = True):
     hidden_cols = [col for col in dataframe.columns if col not in show_columns]
     columns = []
     for col in dataframe.columns:
-        d = {'name': col, 'id': col, "hideable": True}
+        d = {'name': col, 'id': col, "hideable": hideable_bool}
         if col in columns_data_config:
             d.update({'type': 'numeric', 'format': columns_data_config.get(col, None)})
         columns.append(d)
@@ -151,6 +151,11 @@ def get_sample_dfs():
     dftrc2.index = dftrc2.index.set_levels(dftrc2.index.levels[0].strftime('%Y-%m-%d'), level=0)
     dftrc_dict = {"Strategy1": dftrc, "Strategy2": dftrc2}
     return sample_dfstats, sample_heatmap_dict, dftrc_dict
+
+def get_stats_table(dfstats):
+    stat_table = generate_table(dfstats, idname="bt_stats", show_columns=TABLE_SETTINGS_DICT["stats_table"]["show_cols"], 
+                                columns_data_config=TABLE_SETTINGS_DICT["stats_table"]["columns_data_config"])
+    return stat_table
 
 def create_stats_container(dfstats=None, heatmap_dict=None, dftrc_dict = None, use_samples = False):
     if use_samples:

@@ -25,7 +25,19 @@ class PriceDataGC:
                     asset_name = blob.name.replace(cls.folder + "/", "").replace(".csv", "").replace("_NS", "")
                 all_names.append(asset_name)
         return all_names
-    
+    @classmethod
+    def read_all_raw_data(cls):
+        all_paths = cls.get_all_assets(path=True)
+        all_df_dict = {}
+        for path in all_paths:
+            gs_path = f"gs://{cls.bucket_name}/{path}"
+            df = pd.read_csv(gs_path)
+            asset = path.replace(cls.folder + "/", "").replace(".csv", "").replace("_NS", "")
+            # df["Date"] = pd.to_datetime(df["Date"])
+            # df = df.set_index("Date")
+            all_df_dict[asset] = df
+        return all_df_dict
+        
     @classmethod
     def read_all_data(cls, assets = None):
         all_paths = cls.get_all_assets(path=True)
@@ -89,5 +101,6 @@ if __name__ == "__main__":
     # price_data = PriceDataGC.get_combined_price_data(assets = ["NIFTYBEES", "CPSEETF", "JUNIORBEES", "MON100", "MOM100", "CONSUMBEES"])
     # all_data_dict, _, _ = PriceDataGC.read_all_data(assets = ["NIFTYBEES"])
     # df_previous = all_data_dict["NIFTYBEES"]
-    PriceDataGC.update_gc_assets_data()
+    # PriceDataGC.update_gc_assets_data()
+    all_raw = PriceDataGC.read_all_raw_data()
     a=2

@@ -1,47 +1,42 @@
 import dash
-from dash import dcc, html
-import plotly.graph_objs as go
-import numpy as np
-import plotly.express as px
-from data_fetch import PriceData
-from portfolio_backtest import PortfolioBtest
-from portfolio_optimizer import PortfolioOptimizer
-from algo_optimiser import MPTOptimiser
+from dash import Dash, dcc, html, dash_table, Input, Output, State, callback_context, ALL, no_update
+from dash.dependencies import Input, Output
+import dash_bootstrap_components as dbc
+from texts import get_text_content
+from bt_layout import ALL_CARDS_DICT, HEADINGS_DICT
+from base_layout_components import metas, app_title
+from bt_callbacks import get_bt_callbacks
+from bt_layout import overall_bt_layout
+from pricing_layout import overall_pricing_layout
+from pricing_callbacks import get_pricing_callbacks
 
-chosen_assets = ["NIFTYBEES", "CPSEETF", "JUNIORBEES", "MON100", "MOM100", "CONSUMBEES"]
-bnds = ((0.1, 1), (0.05, 1), (0.05, 0.5), (0.05, 0.5), (0.1, 0.5), (0.05, 1))
-# pbtest = PortfolioBtest(pricedata, chosen_assets=chosen_assets, bounds=bnds)
 
-# df_shares_opt_all = pbtest.get_backtest_data(target_returns=0.1)
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.LUX],
+                meta_tags=metas,
+                title=app_title)
 
-# data = bt.get('spy,agg', start='2010-01-01')
-pd2 = PriceData(asset_list=chosen_assets)
-pbtest = PortfolioBtest(pricedata_obj=pd2)
-res = pbtest.get_buy_and_hold_results()
-data_df = res["weighed"].__dict__["return_table"].round(2)
-# Sample data for the heatmap
-z_data = np.random.rand(10, 10)
 
-# Create a Dash app
-app = dash.Dash(__name__)
-data=data_df.values
-fig = px.imshow(data,
-                labels=dict(x="Year", y="Month", color="Returns"),
-                x=list(data_df.columns),
-                y=list(data_df.index),
-                text_auto=True,
-                color_continuous_scale='RdYlGn'
-               )
-fig.update_xaxes(side="top")
-# Define the layout
+# App layout
 app.layout = html.Div([
-    dcc.Graph(
-        id='heatmap',
-        figure=fig,
-        style={'width': '800px', 'height': '600px'}
-    )
+    # represents the browser address bar and doesn't render anything
+    dcc.Location(id='url', refresh=False),
+    html.Div(id='page-content', children = overall_bt_layout)
 ])
 
-# Run the app
-if __name__ == '__main__':
-    app.run_server(debug=True)
+
+@app.callback(Output('page-content', 'children'), Input('url', 'pathname'))
+def display_page(pathname):
+    if pathname == "/assetalloc":
+        return overall_pricing_layout
+    else:
+        return overall_bt_layout
+app = get_pricing_callbacks(app)
+app = get_bt_callbacks(app)
+
+# app = get_bt_callbacks(app)
+
+if __name__ == "__main__":
+    import os
+    credential_path = "C:\\Users\\abhir\\Downloads\\stone-goal-401904-364eb9bc2e42.json"
+    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credential_path
+    app.run_server(debug=False)

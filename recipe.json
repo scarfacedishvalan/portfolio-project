@@ -24,7 +24,8 @@
                             "name": "WeighMeanVar",
                             "args": {
                                 "lookback" : "P3Y",
-                                "covar_method" : "standard"
+                                "covar_method" : "standard",
+                                "bounds": [0.05, 0.5]
                                 }
                             }
                         ],

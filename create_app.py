@@ -1,9 +1,10 @@
 from dash import Dash, dcc, html, dash_table, Input, Output, State, callback_context, ALL, no_update
 import dash_bootstrap_components as dbc
 from base_layout_components import metas, app_title
-from allocation_layout import overall_layout
-from callbacks import get_all_callbacks
-import flask
+from bt_callbacks import get_bt_callbacks
+from bt_layout import overall_bt_layout
+from pricing_layout import overall_pricing_layout
+from pricing_callbacks import get_pricing_callbacks
 
 def create_app():
     app = Dash(
@@ -14,20 +15,21 @@ def create_app():
         title=app_title,
     )
 
-    app.layout = overall_layout
-
-    @app.callback(
-    Output("collapse", "is_open"),
-    [Input("collapse-button", "n_clicks")],
-    [State("collapse", "is_open")],
-    )
-    def toggle_collapse(n_clicks, is_open):
-        if n_clicks:
-            return not is_open
-        return is_open
+    app.layout = html.Div([
+        # represents the browser address bar and doesn't render anything
+        dcc.Location(id='url', refresh=False),
+        html.Div(id='page-content', children = overall_bt_layout)
+    ])
 
 
-    app = get_all_callbacks(app)
+    @app.callback(Output('page-content', 'children'), Input('url', 'pathname'))
+    def display_page(pathname):
+        if pathname == "/assetalloc":
+            return overall_pricing_layout
+        else:
+            return overall_bt_layout
+    app = get_pricing_callbacks(app)
+    app = get_bt_callbacks(app)
     return app
 
 if __name__ == "__main__":
@@ -35,4 +37,4 @@ if __name__ == "__main__":
     credential_path = "C:\\Users\\abhir\\Downloads\\stone-goal-401904-364eb9bc2e42.json"
     os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credential_path
     app = create_app()
-    app.run_server(debug=True)
+    app.run_server(debug=False)
