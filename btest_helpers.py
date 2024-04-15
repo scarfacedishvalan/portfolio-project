@@ -102,6 +102,7 @@ def get_returns_heatmaps(res):
     heatmap_dict = {}
     for strategy in res.keys(): 
        data_df = res[strategy].__dict__["return_table"].round(2)
+       data_df = data_df.reset_index().rename(columns = {"index": "Date"})
        heatmap_dict[strategy] = data_df.to_dict("records")
     return heatmap_dict 
 

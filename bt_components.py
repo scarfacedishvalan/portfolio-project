@@ -228,10 +228,10 @@ collapsible_inputs_bt = dbc.Container(
 stats_table = get_stats_table(dfstats)
 
 def get_heatmap(heatmap_dict, strategy):
-        data_df = pd.DataFrame(heatmap_dict[strategy])
+        data_df = pd.DataFrame(heatmap_dict[strategy]).set_index("Date")
         data=data_df.values
         fig = px.imshow(data,
-                        labels=dict(x="Year", y="Month", color="Returns"),
+                        labels=dict(x="Month", y="Year", color="Returns"),
                         x=list(data_df.columns),
                         y=list(data_df.index),
                         text_auto=True,
@@ -278,18 +278,20 @@ metric_select_drowpdown = html.Div([
             dcc.Dropdown(
                 id='metric-select',
                 options=metric_options,
-                value=metric_options[0]['value']
+                value="Monthly Returns"
             ),
             width=4
         ),
     ])
 ])
 
+mdata = metrics_dict["mreturns"]
+heatmap = get_heatmap(mdata,  all_strategies[1])
 metric_select_graph = dcc.Loading(
     id="bt-metric-loading",
     type="default",
     children=[
-        dcc.Graph(id="bt-returns-graph", style= prices_graph_style),
+        heatmap,
     ]
     )
 # run_bt_r
