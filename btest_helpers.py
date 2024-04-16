@@ -46,8 +46,13 @@ def get_transactions_dfdict(res):
 
 def plot_all_bt_results(res):
     fig = go.Figure()
-    all_strategies = list(res.prices.columns)
-    data = res.prices.reset_index().rename(columns = {"index": "Date"})
+    
+    if isinstance(res, pd.DataFrame):
+        data = res.copy()
+        all_strategies = list(data.columns)[1:]
+    else:
+        data = res.prices.reset_index().rename(columns = {"index": "Date"})
+        all_strategies = list(res.prices.columns)
     for strategy in all_strategies:
        fig.add_trace(go.Scatter(x=data["Date"], y=data[strategy], mode='lines', name=strategy))
     fig.update_layout(

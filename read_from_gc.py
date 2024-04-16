@@ -93,11 +93,14 @@ class PriceDataGC:
                 f.write(f"Done for {asset} \n")
         if log_local:
             f.close()
-        
+
+
+
+
 if __name__ == "__main__":
     credential_path = "C:\\Users\\abhir\\Downloads\\stone-goal-401904-364eb9bc2e42.json"
     os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credential_path
-    all_assets = PriceDataGC.get_all_assets()
+    # all_assets = PriceDataGC.get_all_assets()
     # price_data = PriceDataGC.get_combined_price_data(assets = ["NIFTYBEES", "CPSEETF", "JUNIORBEES", "MON100", "MOM100", "CONSUMBEES"])
     # all_data_dict, _, _ = PriceDataGC.read_all_data(assets = ["NIFTYBEES"])
     # df_previous = all_data_dict["NIFTYBEES"]

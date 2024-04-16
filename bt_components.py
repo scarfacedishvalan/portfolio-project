@@ -21,6 +21,8 @@ import btest_helpers as bth
 import json
 import json_recipe_handler as jrh
 import random
+import constants as cts
+from caching import CachingBTGC
 
 asset_dropdown_width = {"width": "100%"}
 tooltip_styling={
@@ -52,7 +54,7 @@ TABLE_SETTINGS_DICT = {"stats_table": dict (
 HEATMAPS_STYLE = {
                 # 'width': '1000px', 
                   'height': '800px'}
-SELECTED_ASSETS = ["NIFTYBEES", "CPSEETF", "JUNIORBEES", "MON100", "MOM100"]
+SELECTED_ASSETS = cts.SELECTED_ASSETS
 
 def get_stats_table(dfstats):
     stat_table = generate_table(dfstats, idname="bt_stats", show_columns=TABLE_SETTINGS_DICT["stats_table"]["show_cols"], 
@@ -87,24 +89,33 @@ def get_pivot_table(trdict):
         )
     return pivot_table
 
-def load_bt_grpah(asset_list, recipe):
-    pricedata = PriceData(asset_list=asset_list)
-    data = pricedata._dfraw
-    res = jrh.strategy_runner(data, recipe)
-    fig = bth.plot_all_bt_results(res)
-    trdict = bth.get_transactions_dfdict(res)
-    # trdata = pd.concat([df for key, df in trdict.items()], ignore_index=True)
-    pivot_table = get_pivot_table(trdict=trdict)
-    heatmap_dict = bth.get_returns_heatmaps(res)
-    drawdown_dict = bth.get_drawdown_dict(res)
-    dfstats = bth.get_all_stats_df(res)
-    metrics_dict = {"mreturns": heatmap_dict, "drawdowns": drawdown_dict}
+def load_bt_grpah(asset_list, recipe, cache = False):
+    if cache:
+        overall_dict = CachingBTGC.read_from_cloud()
+        data_plot = pd.DataFrame(overall_dict["data_plot"])
+        trdata = overall_dict["transactions"] 
+        trdict = {key: pd.DataFrame(df) for key, df in trdata.items()}
+        metrics_dict = overall_dict["metrics_dict"] 
+        dfstats = pd.DataFrame(overall_dict["dfstats"])
+        fig = bth.plot_all_bt_results(data_plot)
+    else:
+        pricedata = PriceData(asset_list=asset_list)
+        data = pricedata._dfraw
+        res = jrh.strategy_runner(data, recipe)
+        fig = bth.plot_all_bt_results(res)
+        trdict = bth.get_transactions_dfdict(res)
+        # trdata = pd.concat([df for key, df in trdict.items()], ignore_index=True)
+        pivot_table = get_pivot_table(trdict=trdict)
+        heatmap_dict = bth.get_returns_heatmaps(res)
+        drawdown_dict = bth.get_drawdown_dict(res)
+        dfstats = bth.get_all_stats_df(res)
+        metrics_dict = {"mreturns": heatmap_dict, "drawdowns": drawdown_dict}
     return fig, trdict, metrics_dict, dfstats
 
 
 recipe = handle_recipe_dict(recipe_json)
 asset_list = SELECTED_ASSETS
-figbt, trdict, metrics_dict, dfstats = load_bt_grpah(asset_list=asset_list, recipe=recipe)
+figbt, trdict, metrics_dict, dfstats = load_bt_grpah(asset_list=asset_list, recipe=recipe, cache=True)
 pivot_table = get_pivot_table(trdict=trdict)
 all_strategies = list(metrics_dict["mreturns"].keys())
 pivot_row = dcc.Loading(
