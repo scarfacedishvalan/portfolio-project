@@ -62,14 +62,26 @@ For more info on bt Algos and different alogorithms available for experimentatio
 ### Inputs
 
 * Raw Price data: csv files on gcloud in this case for different assets, selected from dropdown
+![Alt text](/readme_images/choose_assets.png?raw=true "Optional Title")
+
 * Json Recipe: In a collapsible component with a dbc Input component.
+
+![Alt text](/readme_images/json_recipe.png?raw=true "Optional Title")
 
 ### Outputs
 * Porfolio Value Graph 
 
 ![Alt text](/readme_images/portfolio_graph.png?raw=true "Optional Title")
 
-### Outputs
+* We can also see how all the strategies performed through multiple metrics like CAGR, calmar ratio and many others provided by the bt result object.
+
+![Alt text](/readme_images/statistical_summary.png?raw=true "Optional Title")
+
+Other metrics like transaction data, monthly return heatmaps are also available for each strategy.
+
+![Alt text](/readme_images/optimarkov-screenshot.png?raw=true "Optional Title")
+
+
 ## Hosted Link
 
 So here’s where the rubber meets the road: [optimarkov.com](https://optimarkov.com/). This is an admittedly quite ugly looking web app where I implemented the above ideas in Plotly Dash and put it to test publicly. The raw data is India’s top Exchange Traded Funds (no reason except for my love for them) and users can tinker with their own recipes. Since the development, testing and deployment team has a total size of one: me, there will be buggy edge cases, which I’ll be happy to address. Whether you’re a seasoned trader or just someone with an academic curiosity for portfolio strategies, I believe this app has a little something for everyone. If not, please marvel at the modern art inspired frontend!
