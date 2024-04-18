@@ -14,12 +14,6 @@ Fortunately for Quantitative Analysts, we have Philippe Morissette who developed
 
 ## Recipes
 
- Create the full HTML string of the app, to be easily read by crawlers and search engines.
-* Does not convert `dcc` components (charts, dropdowns, date pickers, etc.) saving on performance because these components can be heavy without much content, especially charts.
-* Title tag, and meta tags are already supported by Dash, and you can set these using default Dash.
-
-## Example
-
 Every good coder appreciates the importance of a config driven approach to implementation. It allows the user to experiment with various types of inputs without making too many changes to the codebase. If we would like to implement multiple bt Algos strategies on a piece of data and most importantly, compare them, we might have to write repetitive bits of code to compile and visualise the results. To be fair, bt algos does support multiple strategy run in a very intuitive manner, I have tried a different approach of creating a recipe: a json based config that allows users to easily manipulate the parameters of any strategy. Below is a simple example of the WeighMeanVar strategy being implemented, which is basically sharpe ratio minimisation.
 
 
