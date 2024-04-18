@@ -63,7 +63,7 @@ For more info on bt Algos and different alogorithms available for experimentatio
 ![Alt text](/readme_images/json_recipe.png?raw=true "Optional Title")
 
 ### Outputs
-* Porfolio Value Graph 
+* The backtest runs and we get a nice looking Plotly graph of the strategy’s performance over time.
 
 ![Alt text](/readme_images/portfolio_graph.png?raw=true "Optional Title")
 
