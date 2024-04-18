@@ -65,9 +65,9 @@ For more info on bt Algos and different alogorithms available for experimentatio
 * Json Recipe: In a collapsible component with a dbc Input component.
 
 ### Outputs
-* Porfolio Value Graph
+* Porfolio Value Graph 
 
-![Alt text](readme_images\portfolio_graph.png?raw=true "Optional Title")
+![Alt text](/readme_images/portfolio_graph.png?raw=true "Optional Title")
 
 ### Outputs
 ## Hosted Link
