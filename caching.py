@@ -50,7 +50,7 @@ class CachingBTGC():
         return overall_dict
     
     @classmethod
-    def dump_to_json(cls, path = None):
+    def dump_to_json(cls, log_local = False):
         data = cls.generate_overall_dict()
         storage_client = storage.Client()
         ## instance of a bucket in your google cloud storage
@@ -58,6 +58,9 @@ class CachingBTGC():
         
         ## if you want to create a new file 
         blob = bucket.blob(cls.bt_cache_path)
+        if log_local:
+            f = open(r"C:\Python\data\logger_update_cache.txt" , "w")
+            f.write("Logging at: " + str(datetime.datetime.now()) + "\n")
 
         ## uploading data using upload_from_string method
         ## json.dumps() serializes a dictionary object as string
