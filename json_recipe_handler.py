@@ -253,7 +253,7 @@ def recipe_details_to_df(data):
         for optimiser in value["optimiser"]:
             temp_dict = {
                 "Strategy_Name": key,
-                "Rebalance_Frequency": value["rebalance_freq"],
+                "Rebalance_Frequency": value.get("rebalance_freq"),
                 "Optimiser_Name": optimiser["name"],
                 "Optimiser_arguments": json.dumps(optimiser["args"], indent = 4)
             }
@@ -270,7 +270,7 @@ if __name__ == "__main__":
     credential_path = "C:\\Users\\abhir\\Downloads\\stone-goal-401904-364eb9bc2e42.json"
     os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credential_path
     import btest_helpers as bth
-    recipe = load_json_recipe("recipe.json")
+    recipe = load_json_recipe("recipe2.json")
 
     # recipe_dict = handle_recipe_dict(recipe)
     # all_strat = get_all_strategies(recipe_dict)
@@ -286,7 +286,7 @@ if __name__ == "__main__":
     data = pricedata._dfraw
     res = strategy_runner(data=data, recipe=recipe)
     # trdict = bth.get_transactions_dfdict(res)
-    dfstats = bth.get_all_stats_df(res)
+    # dfstats = bth.get_all_stats_df(res)
     # with open(r"bt_results.pickle", "wb") as output_file:
         # pickle.dump(res, output_file)
     # # dfr = recipe_details_to_df(handle_recipe_dict(recipe))

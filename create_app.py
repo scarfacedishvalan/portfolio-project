@@ -5,6 +5,7 @@ from bt_callbacks import get_bt_callbacks
 from bt_layout import overall_bt_layout
 from pricing_layout import overall_pricing_layout
 from pricing_callbacks import get_pricing_callbacks
+from example import get_bt_graph
 
 def create_app():
     app = Dash(
@@ -27,6 +28,9 @@ def create_app():
     def display_page(pathname):
         if pathname == "/assetalloc":
             return overall_pricing_layout
+        elif pathname == "/examples/bt": 
+            graph = get_bt_graph()
+            return graph
         else:
             return overall_bt_layout
     app = get_pricing_callbacks(app)

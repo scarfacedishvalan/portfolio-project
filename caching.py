@@ -31,8 +31,10 @@ class CachingBTGC():
         pricedata = PriceData(asset_list=asset_list)
         data = pricedata._dfraw
         res = jrh.strategy_runner(data, recipe)
+        print("Strategy Runs Complete")
         fig = bth.plot_all_bt_results(res)
         trdict = bth.get_transactions_dfdict(res)
+        print("Transactions dict complete")
         heatmap_dict = bth.get_returns_heatmaps(res)
         drawdown_dict = bth.get_drawdown_dict(res)
         dfstats = bth.get_all_stats_df(res)
@@ -47,6 +49,7 @@ class CachingBTGC():
         overall_dict["transactions"] = trdata
         overall_dict["metrics_dict"] = metrics_dict
         overall_dict["dfstats"] = dfstats.to_dict("records")
+        print("Overall dict generated")
         return overall_dict
     
     @classmethod

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Optimization Strategy</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+        }
+
+        .sidebar {
+            width: 200px;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        .content {
+            flex: 1;
+            padding: 20px;
+            background-color: #ffffff;
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            margin-bottom: 10px;
+        }
+
+        .sidebar ul li a {
+            text-decoration: none;
+            color: #333;
+        }
+
+        .sidebar ul li a:hover {
+            color: #007bff;
+        }
+
+        .json-code {
+            background-color: #f4f4f4;
+            border-radius: 5px;
+            padding: 10px;
+            overflow-x: auto;
+        }
+
+        .json-code pre {
+            margin: 0;
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+
+        .code-block {
+            background-color: #f4f4f4;
+            border-radius: 5px;
+            padding: 10px;
+            overflow-x: auto;
+        }
+
+        .code-block pre {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <ul>
+            <li><a href="#optimizer">An Optimizer</a></li>
+            <li><a href="#backtesting">A Backtesting Framework</a></li>
+            <li><a href="#bt">bt Python package</a></li>
+            <li><a href="#augmenting">Augmenting bt Algos Implementation</a></li>
+            <li><a href="#plotly">Plotly Dash: A Cherry on Top!</a></li>
+            <li><a href="#theory-to-practice">From Theory to Practice: A Dash Based Website</a></li>
+        </ul>
+    </div>
+    <div class="content">
+        <h1>Implementing and Backtesting Portfolio Optimization Strategy</h1>
+        <div class="portfolio__overview__single column__space">
+            <img src="readme_images/portfolio-stock.jpg" alt="optimarokov.com" />
+        </div>
+        <p>Here’s a simple question: How would you implement and backtest a portfolio optimization strategy given raw price data for different assets. If we narrow the scope of the question to Python, there are two key components we desperately need:</p>
+        <ol>
+            <li>
+                <b id="optimizer">An Optimizer</b>
+                <p>Takes price data as input and spits out weight allocations for each asset</p>
+            </li>
+            <li>
+                <b id="backtesting">A Backtesting Framework</b>
+                <p>A comprehensive set of functions/methods that allow the user to actually implement the allocation on different rebalance dates and visualize the results. Additionally, we should be able to see the granular details of the allocations, like transactions done for each asset to achieve the target weights, the value of the assets and the overall portfolio and ultimately, the performance metrics.</p>
+            </li>
+        </ol>
+        <h2 id="bt">bt: A flexible backtesting package</h2>
+        <p>Fortunately for Quantitative Analysts, we have Philippe Morissette who developed two key packages: ffn and more importantly, bt which is an immensely powerful backtesting framework. The bt package provides a very flexible and seamless way to achieve the above two with its rich library of algorithms (bt.Algos). The implementation of each algo is very simple, it has a target, meaning the input data and the algorithm ultimately assigns weights to the assets in a temp variable. So creating your own algo is ridiculously easy as long as we assign the weights at the end of it. For a quickstart guide refer <a href="https://pmorissette.github.io/bt/">here</a>. Here's a simple example of how to run a strategy.</p>
+        <div class="code-block">
+            <pre><code>
+                import bt
+    
+                # Define data
+                data = bt.get('spy,aapl', start='2010-01-01')
+    
+                # Define strategy
+                s1 = bt.Strategy('s1', [bt.algos.RunWeekly(), 
+                                        bt.algos.SelectAll(), 
+                                        bt.algos.WeighEqually(), 
+                                        bt.algos.Rebalance()])
+    
+                # Create backtest
+                test = bt.Backtest(s1, data)
+    
+                # Run backtest
+                res = bt.run(test)
+    
+                # Plot results
+                res.plot()
+            </code></pre>
+        </div>
+        <p>This is what the result looks like when plotted.</p>
+        <div class="portfolio__overview__single column__space">
+            <img src="readme_images/bt-example.png" alt="optimarokov.com" />
+        </div>
+        <h2 id="augmenting">Augmenting bt Algos Implementation: A Recipe Driven Strategy Runner</h2>
+        <p>Every good coder appreciates the importance of a config driven approach to implementation. It allows the user to experiment with various types of inputs without making too many changes to the codebase. If we would like to implement multiple bt Algos strategies on a piece of data and most importantly, compare them, we might have to write repetitive bits of code to compile and visualize the results. To be fair, bt algos does support multiple strategy run in a very intuitive manner, I have tried a different approach of creating a recipe: a json based config that allows users to easily manipulate the parameters of any strategy.</p>
+        <p>Below is a simple example of the WeighMeanVar strategy being implemented, which is basically sharpe ratio minimization.</p>
+        <!-- JSON code component -->
+        <div class="json-code">
+            <pre><code>{
+      "WeighMeanStrategy": {
+        "rebalance_freq": "RunMonthly",
+        "select": ["AAPL", "MSFT", "GOOGL", "AMZN"],
+        "RunAfterDate": "2022-01-01",
+        "optimiser": {
+          "name": "MinVar",
+          "args": {
+            "lookback": "P3M"
+          }
+        }
+      }
+    }</code></pre>
+    </div>
+    <ul>
+        <li><p><strong>WeighMeanStrategy</strong> is the name of a strategy chosen by user. The overall recipe can have multiple such strategies with different underlying params.</p></li>
+        <li><p><strong>rebalance_freq:</strong> As the name suggests this decides how often the portfolio will be rebalanced. Choose among: RunYearly, RunMonthly, RunQuarterly, RunWeekly, RunDaily. Custom periods are not yet supported.</p></li>
+        <li><p><strong>select:</strong> Specifies the assets to select from the data being backtested.</p></li>
+        <li><p><strong>RunAfterDate:</strong> Date after which the strategy is implemented</p></li>
+        <li><p><strong>optimiser:</strong> Most important parameter! The name is the bt Algos optimiser (choose any from documentation) and the args is the paramters being passed to the optimiser. </p></li>
+    </ul>
+    <h3>Multiple Parameter support</h3>
+    <p>Now here’s the steroid boost we provide in our implementation: if you pass a list of values in a parameter, multiple strategies will be implemented with the different combinations. For example if we pass the following in optimiser:</p>
+    <div class="json-code">
+        <pre><code>{
+            "optimiser":
+            {
+                "name": "WeighMeanVar",
+                "args": {
+                    "lookback" : ["P3Y", "P2Y"],
+                "covar_method" : "standard"
+                }
+            }</code></pre>
+    </div>
+    <p>The strategy runner will internally convert the above into two strategies: WeighMeanStrategy.1 and WeighMeanStrategy.2 which will run independently with the two lookbacks.</p>
+    <p>Please note that although the lookbacks are passed as pandas date offsets typically in bt Algos, for json implementation purposes we pass a string based on the ISO 8601 duration format.</p>
+        <h2 id="plotly">Plotly Dash: A Cherry on Top!</h2>
+        <p>Honestly, if the recipe driven approach was being provided as a simple function or class method to users for experimenting on their own, it’s not a major improvement on anything that is not already available in bt package. But the advantage of this approach comes to fruition when it is paired with a Python Dash based UI implementation. To summarize, Plotly Dash is a Python framework for building lightweight analytical web applications. It requires minimal knowledge of front end and very easy for Python users to pick up. It has basic front end components like user input fields, dropdowns and buttons that are very easy to link to backend Python processes through app callbacks functionality.</p>
+        <p>So, let’s say we have a choice of assets whose raw price data is being read into the app. We can choose n of them from a simple dropdown component.</p>
+        <div>
+            <img src="readme_images/usecase-faster.gif" alt="usage-gif" />
+        </div>
+        <p>In addition to the above, the bt results object we get after running a backtest has several other interesting data points like transactions, monthly returns, drawdowns across time. All of this can be conveniently visualized through the dash app. The ease of parameter variation and trying out various optimizers on a dataset makes this combination of bt and plotly a definite winner. This is essentially a low code implementation of bt on real data, with enough customizations available to the user to justify its usage.</p>
+        <h2 id="theory-to-practice">From Theory to Practice: A Dash Based Website</h2>
+        <p>So here’s where the rubber meets the road: <a href="https://optimarkov.com">optimarkov.com</a>. This is an admittedly quite ugly looking web app where I implemented the above ideas in Plotly Dash and put it to test publicly. The raw data is India’s top Exchange Traded Funds (no reason except for my love for them) and users can tinker with their own recipes. Since the development, testing and deployment team has a total size of one: me, there will be buggy edge cases, which I’ll be happy to address. Whether you’re a seasoned trader or just someone with an academic curiosity for portfolio strategies, I believe this app has a little something for everyone. If not, please marvel at the modern art inspired frontend!</p>
+    </div>
+</body>
+</html>

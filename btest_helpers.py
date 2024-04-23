@@ -5,7 +5,8 @@ from pandas.tseries.offsets import BDay
 def get_weights_df(backtest):
     pos_df = backtest.data.copy()
     for col in pos_df.columns:
-        pos_df[col] = backtest.strategy.children[col].__dict__["data"]["position"]*backtest.data[col]
+        if col in backtest.strategy.children.keys():
+            pos_df[col] = backtest.strategy.children[col].__dict__["data"]["position"]*backtest.data[col]
     weights_df = pos_df.copy()
     dfall = pos_df.sum(axis=1)
     for col in weights_df.columns:
@@ -15,7 +16,8 @@ def get_weights_df(backtest):
 def get_holdings_df(backtest):
     pos_df = backtest.data.copy()
     for col in pos_df.columns:
-        pos_df[col] = backtest.strategy.children[col].__dict__["data"]["position"]
+        if col in backtest.strategy.children.keys():
+            pos_df[col] = backtest.strategy.children[col].__dict__["data"]["position"]
     return pos_df
 
 def get_transactions_dfdict(res):
