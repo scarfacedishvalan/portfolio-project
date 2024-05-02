@@ -59,7 +59,8 @@ def generate_table(dataframe, idname, show_columns, columns_data_config, cellwid
         style_table={'overflowX': 'auto'},  # Enable horizontal scrolling
         hidden_columns=hidden_cols,
         style_cell={'width': cellwidth},
-        sort_action='native'
+        sort_action='native',
+            export_format='xlsx'
     )
 
 def generate_html_component(component_id):

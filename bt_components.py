@@ -89,7 +89,7 @@ def get_pivot_table(trdict):
         )
     return pivot_table
 
-def load_bt_grpah(asset_list, recipe, cache = False):
+def load_bt_graph(asset_list, recipe, cache = False):
     if cache:
         overall_dict = CachingBTGC.read_from_cloud()
         data_plot = pd.DataFrame(overall_dict["data_plot"])
@@ -97,12 +97,12 @@ def load_bt_grpah(asset_list, recipe, cache = False):
         trdict = {key: pd.DataFrame(df) for key, df in trdata.items()}
         metrics_dict = overall_dict["metrics_dict"] 
         dfstats = pd.DataFrame(overall_dict["dfstats"])
-        fig = bth.plot_all_bt_results(data_plot)
+        fig, datap = bth.plot_all_bt_results(data_plot)
     else:
         pricedata = PriceData(asset_list=asset_list)
         data = pricedata._dfraw
         res = jrh.strategy_runner(data, recipe)
-        fig = bth.plot_all_bt_results(res)
+        fig, datap = bth.plot_all_bt_results(res)
         trdict = bth.get_transactions_dfdict(res)
         # trdata = pd.concat([df for key, df in trdict.items()], ignore_index=True)
         pivot_table = get_pivot_table(trdict=trdict)
@@ -110,12 +110,12 @@ def load_bt_grpah(asset_list, recipe, cache = False):
         drawdown_dict = bth.get_drawdown_dict(res)
         dfstats = bth.get_all_stats_df(res)
         metrics_dict = {"mreturns": heatmap_dict, "drawdowns": drawdown_dict}
-    return fig, trdict, metrics_dict, dfstats
+    return fig, datap, trdict, metrics_dict, dfstats
 
 
 recipe = handle_recipe_dict(recipe_json)
 asset_list = SELECTED_ASSETS
-figbt, trdict, metrics_dict, dfstats = load_bt_grpah(asset_list=asset_list, recipe=recipe, cache=True)
+figbt, datap, trdict, metrics_dict, dfstats = load_bt_graph(asset_list=asset_list, recipe=recipe, cache=True)
 pivot_table = get_pivot_table(trdict=trdict)
 all_strategies = list(metrics_dict["mreturns"].keys())
 pivot_row = dcc.Loading(
@@ -154,6 +154,12 @@ asset_dropdown_bt = html.Div(children = [dcc.Dropdown(
     )], style=bt_dropdown_style)
 
 bt_button =  dbc.Button('Run backtest', id='bt-run-button', n_clicks=0)
+download_bt_graph =  html.Div([
+    dcc.Store(id = "bt-plot-data", data = datap.to_dict("records")),
+    dbc.Button("Download raw data", id="btn-download-bt"),
+    dcc.Download(id="download-bt")
+])
+
 graph =     dcc.Loading(
     id="bt-graph-loading",
     type="default",

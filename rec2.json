@@ -1,17 +1,4 @@
 {
-    "mptopt": {
-        "rebalance_freq": "RunYearly",
-        "select": "all",
-        "RunAfterDate": "2015-12-24",
-        "optimiser": {
-            "name": "MPTOptimiser",
-            "args": {
-                "returns_period": 365,
-                "target_return" : [0.16, 0.18, 0.2, 0.22]
-            }
-        },
-        "rebalance": true
-    },
     "weighmeanvar": {
         "rebalance_freq": "RunYearly",
         "select": "all",
@@ -20,12 +7,22 @@
             {
                 "name": "WeighMeanVar",
                 "args": {
-                    "lookback": "P3Y",
+                    "covar_method": "standard"
+                }
+            }
+        ],
+        "rebalance": true
+    },
+    "weighmeanvar_bounded": {
+        "rebalance_freq": "RunYearly",
+        "select": "all",
+        "RunAfterDate": "2015-12-24",
+        "optimiser": [
+            {
+                "name": "WeighMeanVar",
+                "args": {
                     "covar_method": "standard",
-                    "bounds": [
-                        0.05,
-                        0.5
-                    ]
+                    "bounds" : [0.05, 0.5]
                 }
             }
         ],

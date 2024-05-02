@@ -1,0 +1,87 @@
+{
+    "yearly_3yl": {
+        "rebalance_freq": "RunYearly",
+        "select": "all",
+        "RunAfterDate": "2015-12-24",
+        "optimiser": [
+            {
+                "name": "WeighMeanVar",
+                "args": {
+                    "lookback": "P3Y",
+                    "covar_method": "standard",
+                    "bounds" : [0, 0.5]
+                }
+            }
+        ],
+        "rebalance": true
+    },
+
+    "yearly_2yl": {
+        "rebalance_freq": "RunYearly",
+        "select": "all",
+        "RunAfterDate": "2015-12-24",
+        "optimiser": [
+            {
+                "name": "WeighMeanVar",
+                "args": {
+                    "lookback": "P2Y",
+                    "covar_method": "standard",
+                    "bounds" : [0, 0.5]
+                }
+            }
+        ],
+        "rebalance": true
+    },
+
+    "yearly_1yl": {
+        "rebalance_freq": "RunYearly",
+        "select": "all",
+        "RunAfterDate": "2015-12-24",
+        "optimiser": [
+            {
+                "name": "WeighMeanVar",
+                "args": {
+                    "lookback": "P1Y",
+                    "covar_method": "standard",
+                    "bounds" : [0, 0.5]
+                }
+            }
+        ],
+        "rebalance": true
+    },
+
+    "quarterly_1yl": {
+        "rebalance_freq": "RunQuarterly",
+        "select": "all",
+        "RunAfterDate": "2015-12-24",
+        "optimiser": [
+            {
+                "name": "WeighMeanVar",
+                "args": {
+                    "lookback": "P1Y",
+                    "covar_method": "standard",
+                    "bounds" : [0, 0.5]
+                }
+            }
+        ],
+        "rebalance": true
+    },
+
+    "quarterly_3ml": {
+        "rebalance_freq": "RunQuarterly",
+        "select": "all",
+        "RunAfterDate": "2015-12-24",
+        "optimiser": [
+            {
+                "name": "WeighMeanVar",
+                "args": {
+                    "lookback": "P3M",
+                    "covar_method": "standard",
+                    "bounds" : [0, 0.5]
+                }
+            }
+        ],
+        "rebalance": true
+    }
+ 
+}

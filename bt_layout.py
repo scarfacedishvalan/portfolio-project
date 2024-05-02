@@ -3,7 +3,7 @@ from dash import Dash, dcc, html, dash_table, Input, Output, State, callback_con
 from dash.dependencies import Input, Output
 import dash_bootstrap_components as dbc
 from texts import get_text_content
-from bt_components import collapsible_inputs_bt, recipe_table, run_bt_row, asset_dropdown_bt, bt_button, graph, pivot_row, stats_table, metric_select_graph, metric_select_drowpdown
+from bt_components import collapsible_inputs_bt, recipe_table, run_bt_row, asset_dropdown_bt, bt_button, graph, pivot_row, stats_table, metric_select_graph, metric_select_drowpdown, download_bt_graph
 
 HEADINGS_DICT = {1: "Modern Portfolio Theory", 2: "Python bt package", 3: "bt Algos: Example",
                  4: "Backtesting Recipes: Introduction", 5: "Recipe Example", 6: "Recipe: Interpretation",
@@ -21,7 +21,7 @@ ALL_CARDS_DICT[6] = html.Div(children=[get_text_content("backtesting_4c"), get_t
 ALL_CARDS_DICT[7] = html.Div(children=[get_text_content("heading_bt"),  get_text_content("backtesting_4d"), get_text_content("asset_alloc_link"), ])
 ALL_CARDS_DICT[8] = html.Div(children=[get_text_content("backtesting_5"), collapsible_inputs_bt, get_text_content("backtesting_5a"), recipe_table])
 ALL_CARDS_DICT[9] = html.Div(children=[get_text_content("backtesting_6"), asset_dropdown_bt, html.Br(), bt_button])
-ALL_CARDS_DICT[10] = html.Div(children=[get_text_content("backtesting_7"), graph])
+ALL_CARDS_DICT[10] = html.Div(children=[get_text_content("backtesting_7"), html.Br(), download_bt_graph, html.Br(), html.Br(), graph])
 ALL_CARDS_DICT[11] = html.Div(children=[get_text_content("backtesting_8"), stats_table])
 ALL_CARDS_DICT[12] = html.Div(children=[get_text_content("backtesting_10"), pivot_row])
 ALL_CARDS_DICT[13] = html.Div(children=[get_text_content("backtesting_11"), metric_select_drowpdown, html.Br(), metric_select_graph])

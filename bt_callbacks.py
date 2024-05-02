@@ -37,7 +37,8 @@ def get_bt_callbacks(app):
             return [no_update, no_update, no_update]    
     
     @app.callback(
-        [Output('bt-graph', 'figure'), Output("bt_stats", "data"), Output("bt-pivot-loading", "children"), Output("bt-metrics-store", "data")],
+        [Output('bt-graph', 'figure'), Output("bt_stats", "data"), Output("bt-pivot-loading", "children"), Output("bt-metrics-store", "data"),
+         Output("bt-plot-data", "data")],
         Input('bt-run-button', 'n_clicks'),
         Input('asset_dropdown_bt', 'value'),
         Input('recipe-store', 'data')
@@ -46,13 +47,27 @@ def get_bt_callbacks(app):
         changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0] #To determine if n_clicks is changed. 
         if "bt-run-button" in changed_id:
             if asset_list is None or not recipe:
-                return [no_update, no_update, no_update, no_update]
-            fig, trdict, metrics_dict, dfstats = btc.load_bt_grpah(asset_list=asset_list, recipe=recipe)
+                return [no_update, no_update, no_update, no_update, no_update]
+            fig, datap, trdict, metrics_dict, dfstats = btc.load_bt_graph(asset_list=asset_list, recipe=recipe)
             trdata = pd.concat([df for key, df in trdict.items()], ignore_index=True)
             pivot_table = btc.get_pivot_table(trdict=trdict)
-            return [fig, dfstats.to_dict("records"), pivot_table, metrics_dict]
+            return [fig, dfstats.to_dict("records"), pivot_table, metrics_dict, datap.to_dict("records")]
         else:
-            return [no_update, no_update, no_update, no_update]
+            return [no_update, no_update, no_update, no_update, no_update]
+
+
+    @app.callback(
+        Output("download-bt", "data"),
+        [Input("btn-download-bt", "n_clicks"), Input("bt-plot-data", "data") ],
+        prevent_initial_call=True,
+    )
+    def downloader(n_clicks, datap_dict):
+        changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0] #To determine if n_clicks is changed. 
+        if "btn-download-bt" in changed_id:
+            df = pd.DataFrame(datap_dict)
+            return dcc.send_data_frame(df.to_csv, "figure_bt_raw.csv")
+        else:
+            return no_update
 
     @app.callback(
         [Output('bt-strategy-select', 'options'),

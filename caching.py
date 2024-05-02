@@ -32,7 +32,7 @@ class CachingBTGC():
         data = pricedata._dfraw
         res = jrh.strategy_runner(data, recipe)
         print("Strategy Runs Complete")
-        fig = bth.plot_all_bt_results(res)
+        fig, data = bth.plot_all_bt_results(res)
         trdict = bth.get_transactions_dfdict(res)
         print("Transactions dict complete")
         heatmap_dict = bth.get_returns_heatmaps(res)
@@ -70,6 +70,19 @@ class CachingBTGC():
         blob.upload_from_string(json.dumps(data))
 
     @classmethod
+    def upload_file(cls, local_path, upload_path):
+        storage_client = storage.Client()
+        ## instance of a bucket in your google cloud storage
+        bucket = storage_client.get_bucket(cls.bucket_name)
+        
+        ## if you want to create a new file 
+        blob = bucket.blob(upload_path)
+        ## uploading data using upload_from_string method
+        ## json.dumps() serializes a dictionary object as string
+        blob.upload_from_filename(local_path)
+        return blob.public_url
+
+    @classmethod
     def read_from_cloud(cls, path = None):
         storage_client = storage.Client()
         ## instance of a bucket in your google cloud storage
@@ -87,6 +100,14 @@ class CachingBTGC():
 if __name__ == "__main__":
     credential_path = "C:\\Users\\abhir\\Downloads\\stone-goal-401904-364eb9bc2e42.json"
     os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credential_path
-    CachingBTGC.dump_to_json()
-    data = CachingBTGC.read_from_cloud()
+    # codeblock1 = r"C:\Users\abhir\Downloads\json-block-1.html"
+    # url1 = CachingBTGC.upload_file(local_path = codeblock1, upload_path = "configs/json-block-1.html")
+    # codeblock2 = r"C:\Users\abhir\Downloads\json-block-2.html"
+    # url2 = CachingBTGC.upload_file(local_path = codeblock2, upload_path = "configs/json-block-2.html")
+    src = r"C:\Python\data\article_data"
+    for i in range(1, 5):
+        filepath = src + "/" + f"rec{i}.html"
+        url = CachingBTGC.upload_file(local_path = filepath, upload_path = f"configs/rec{i}.html")
+        print(url)
+    # data = CachingBTGC.read_from_cloud()
     a=2

@@ -55,6 +55,8 @@ def plot_all_bt_results(res):
     else:
         data = res.prices.reset_index().rename(columns = {"index": "Date"})
         all_strategies = list(res.prices.columns)
+    f = lambda x: pd.to_datetime(x).strftime("%Y-%m-%d")
+    data["Date"] = data["Date"].apply(f)
     for strategy in all_strategies:
        fig.add_trace(go.Scatter(x=data["Date"], y=data[strategy], mode='lines', name=strategy))
     fig.update_layout(
@@ -63,7 +65,7 @@ def plot_all_bt_results(res):
                         yaxis=dict(title='Value'),
                         showlegend=True
                     )
-    return fig
+    return fig, data
 
 
 def get_all_stats_df(res):
