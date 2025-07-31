@@ -12,25 +12,6 @@ import base64
 
 RAW_PRICE_DATAPATH = "price_data.xlsx"
 
-# Save credentials.json from base64 env var
-def setup_google_credentials():
-    if not os.path.exists('/tmp/credentials.json'):
-        b64_creds = os.getenv('GOOGLE_CREDS_B64')
-        if not b64_creds:
-            raise Exception("GOOGLE_CREDS_B64 environment variable not set")
-
-        # Define where to save the file
-        creds_path = '/tmp/credentials.json'  # /tmp is writable on Render
-
-        # Decode and write
-        with open(creds_path, 'w') as f:
-            f.write(base64.b64decode(b64_creds).decode('utf-8'))
-
-    # Set the environment variable for Google APIs to find it
-    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = creds_path
-
-setup_google_credentials()
-
 class PriceData:
     def __init__(self, df = None, periods = 365, asset_list = None):
         self.asset_list = asset_list
@@ -47,9 +28,6 @@ class PriceData:
             self._returnsdf = self.get_returns()
             
     def read_prices(self):
-        # df = pd.read_excel(self._data_src)
-        # df[self._datecol] = pd.to_datetime(df[self._datecol])
-        # df = df.set_index(self._datecol)
         price_df = PriceDataGC.get_combined_price_data(assets=self.asset_list)
         return price_df
 
@@ -78,16 +56,4 @@ class PriceData:
             
     
 if __name__ == "__main__":
-    import base64
-    credential_path = "C:\\Users\\abhir\\Downloads\\stone-goal-401904-364eb9bc2e42.json"
-    with open(credential_path, "rb") as f:
-        encoded = base64.b64encode(f.read()).decode("utf-8")
-    
-    with open("encoded.txt", "w") as f:
-        f.write(encoded)
-    # with open("encoded.txt", "w") as f:
-    #     f.write(encoded)
-    #     os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credential_path
-    #     pricedata = PriceData(asset_list=["NIFTYBEES", "CPSEETF", "JUNIORBEES", "MON100", "MOM100", "CONSUMBEES"])
-    #     # df = pricedata.get_summary_returns()
-    #     a=2
+    pd = PriceData()

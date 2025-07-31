@@ -4,6 +4,7 @@ import plotly.graph_objects as go
 import pandas as pd
 from base_layout_components import start_amount, start_year, number_of_years, end_amount, rate_of_return, footer, collapsible_inputs_bt, create_stats_container, get_recipe_table
 from data_fetch import PriceData
+from read_from_gc import PriceDataGC
 import dash_daq as daq
 from texts import get_text_content
 
@@ -84,7 +85,7 @@ def get_slider_card(assetlist, values = None):
     return slider_list, values
 
 all_assets = list(PriceData()._dfraw.columns)
-ticker_mapping_df = pd.read_csv('gs://price-data-etf/configs/ticker_mapping.csv')
+ticker_mapping_df = PriceDataGC().read_config()
 name_dict = dict(zip(ticker_mapping_df["asset"].to_list(), ticker_mapping_df["name"].to_list()))
 asset_dropdown = html.Div(children = [dcc.Dropdown(
     id="asset_dropdown",

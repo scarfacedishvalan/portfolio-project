@@ -2,3 +2,4 @@ archive/
 *.cpython-39.pyc
 assets/
 venv/
+encoded*

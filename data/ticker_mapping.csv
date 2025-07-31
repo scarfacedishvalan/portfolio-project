@@ -1,0 +1,34 @@
+asset,source,ticker,path,name
+BANKBEES,yfinance,BANKBEES.NS,price-data/BANKBEES_NS.csv,Nippon India ETF Nifty Bank BeES
+BSLGOLDETF,yfinance,BSLGOLDETF.NS,price-data/BSLGOLDETF_NS.csv,Aditya Birla Sun Life Gold ETF
+BSLNIFTY,yfinance,BSLNIFTY.NS,price-data/BSLNIFTY_NS.csv,Aditya Birla Sun Life Nifty 50 ETF
+CONSUMBEES,yfinance,CONSUMBEES.NS,price-data/CONSUMBEES_NS.csv,NIP IND ETF CONSUMPTION
+CPSEETF,yfinance,CPSEETF.NS,price-data/CPSEETF_NS.csv,CPSE ETF
+GOLDBEES,yfinance,GOLDBEES.NS,price-data/GOLDBEES_NS.csv,Nippon India ETF Gold BeES
+HNGSNGBEES,yfinance,HNGSNGBEES.NS,price-data/HNGSNGBEES_NS.csv,Nippon India ETF Hang Seng BeES
+IDFNIFTYET,yfinance,IDFNIFTYET.NS,price-data/IDFNIFTYET_NS.csv,Bandhan Nifty 50 ETF
+IVZINGOLD,yfinance,IVZINGOLD.NS,price-data/IVZINGOLD_NS.csv,Invesco India Gold ETF
+IVZINNIFTY,yfinance,IVZINNIFTY.NS,price-data/IVZINNIFTY_NS.csv,Invesco India Nifty 50 ETF
+JUNIORBEES,yfinance,JUNIORBEES.NS,price-data/JUNIORBEES_NS.csv,Nippon India ETF Nifty Next 50 Junior BeES
+KOTAKBKETF,yfinance,KOTAKBKETF.NS,price-data/KOTAKBKETF_NS.csv,Kotak Nifty Bank ETF
+KOTAKGOLD,yfinance,KOTAKGOLD.NS,price-data/KOTAKGOLD_NS.csv,Kotak Gold ETF
+KOTAKNIFTY,yfinance,KOTAKNIFTY.NS,price-data/KOTAKNIFTY_NS.csv,Kotak Nifty 50 ETF
+KOTAKNV20,yfinance,KOTAKNV20.NS,price-data/KOTAKNV20_NS.csv,Kotak Nifty 50 Value 20 ETF
+LICMFGOLD,yfinance,LICMFGOLD.NS,price-data/LICMFGOLD_NS.csv,LIC MF Gold ETF
+LICNETFGSC,yfinance,LICNETFGSC.NS,price-data/LICNETFGSC_NS.csv,LIC MF Nifty 8-13 yr G-SEC ETF
+LICNETFN50,yfinance,LICNETFN50.NS,price-data/LICNETFN50_NS.csv,LIC MF Nifty 50 ETF
+LICNETFSEN,yfinance,LICNETFSEN.NS,price-data/LICNETFSEN_NS.csv,LIC MF S & P BSE Sensex ETF
+LICNFNHGP,yfinance,LICNFNHGP.NS,price-data/LICNFNHGP_NS.csv,LIC MF Nifty 100 ETF
+LIQUIDBEES,yfinance,LIQUIDBEES.NS,price-data/LIQUIDBEES_NS.csv,Nippon India ETF Nifty 1D Rate Liquid BeES
+MOM100,yfinance,MOM100.NS,price-data/MOM100_NS.csv,Motilal Oswal Nifty Midcap 100 ETF
+MON100,yfinance,MON100.NS,price-data/MON100_NS.csv,Motilal Oswal NASDAQ 100 ETF
+NIFTYBEES,yfinance,NIFTYBEES.NS,price-data/NIFTYBEES_NS.csv,Nippon India ETF Nifty 50 BeES
+QNIFTY,yfinance,QNIFTY.NS,price-data/QNIFTY_NS.csv,Quantum Nifty 50 ETF
+SETF10GILT,yfinance,SETF10GILT.NS,price-data/SETF10GILT_NS.csv,SBI Nifty 10 yr Benchmark G-Sec ETF
+SETFGOLD,yfinance,SETFGOLD.NS,price-data/SETFGOLD_NS.csv,SBI Gold ETF
+SETFNIF50,yfinance,SETFNIF50.NS,price-data/SETFNIF50_NS.csv,SBI Nifty 50 ETF
+SETFNIFBK,yfinance,SETFNIFBK.NS,price-data/SETFNIFBK_NS.csv,SBI Nifty Bank ETF
+SETFNN50,yfinance,SETFNN50.NS,price-data/SETFNN50_NS.csv,SBI Nifty Next 50 ETF
+SHARIABEES,yfinance,SHARIABEES.NS,price-data/SHARIABEES_NS.csv,Nippon India ETF Nifty 50 Shariah BeES
+UTINIFTETF,yfinance,UTINIFTETF.NS,price-data/UTINIFTETF_NS.csv,UTI Nifty 50 Exchange Traded Fund
+UTISENSETF,yfinance,UTISENSETF.NS,price-data/UTISENSETF_NS.csv,UTI S&P BSE Sensex ETF

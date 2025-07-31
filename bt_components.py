@@ -14,6 +14,7 @@ from allocation_layout import get_slider_card
 import dash
 from portfolio_plots import PortfolioPlot, plot_multiple_btest_pfolios
 from data_fetch import PriceData
+from read_from_gc import PriceDataGC
 import numpy as np
 import dash_bootstrap_components as dbc
 from base_layout_components import generate_table
@@ -91,7 +92,7 @@ def get_pivot_table(trdict):
 
 def load_bt_graph(asset_list, recipe, cache = False):
     if cache:
-        overall_dict = CachingBTGC.read_from_cloud()
+        overall_dict = CachingBTGC.read_from_local()
         data_plot = pd.DataFrame(overall_dict["data_plot"])
         trdata = overall_dict["transactions"] 
         trdict = {key: pd.DataFrame(df) for key, df in trdata.items()}
@@ -143,7 +144,7 @@ recipe_table = dcc.Loading(
     ]
     )
 all_assets = list(PriceData()._dfraw.columns)
-ticker_mapping_df = pd.read_csv('gs://price-data-etf/configs/ticker_mapping.csv')
+ticker_mapping_df = PriceDataGC().read_config()
 name_dict = dict(zip(ticker_mapping_df["asset"].to_list(), ticker_mapping_df["name"].to_list()))
 asset_dropdown_bt = html.Div(children = [dcc.Dropdown(
     id="asset_dropdown_bt",
