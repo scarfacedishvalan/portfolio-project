@@ -6,6 +6,7 @@ from bt_layout import overall_bt_layout
 from pricing_layout import overall_pricing_layout
 from pricing_callbacks import get_pricing_callbacks
 from example import get_bt_graph
+from numba_test import print_benchmarking_results
 import platform
 import os
 import sys
@@ -48,7 +49,8 @@ def create_app():
             return overall_bt_layout
     app = get_pricing_callbacks(app)
     app = get_bt_callbacks(app)
-    print_system_info()
+    # print_system_info()
+    print_benchmarking_results()
     return app
 
 if __name__ == "__main__":

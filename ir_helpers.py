@@ -45,3 +45,7 @@ model_config = {
         ]
     }
 }
+
+# Platform: Linux-6.12.12+bpo-cloud-amd64-x86_64-with-glibc2.31
+# Architecture: ('64bit', 'ELF')
+# CPU Count: 48
