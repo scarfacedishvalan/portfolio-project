@@ -18,5 +18,7 @@ def merge_asset_data(asset_ticker, df_existing = None):
         dfall = df.copy()
     return dfall
 
+if __name__ == "__main__":
+    df = merge_asset_data("")
 
 

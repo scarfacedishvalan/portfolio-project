@@ -102,7 +102,7 @@ def plot_all_assets_raw_data(all_assets_dict = None, assets = None):
 
 
 all_assets = list(PriceData()._dfraw.columns)
-ticker_mapping_df = pd.read_csv('gs://price-data-etf/configs/ticker_mapping.csv')
+ticker_mapping_df = PriceDataGC().read_config()
 name_dict = dict(zip(ticker_mapping_df["asset"].to_list(), ticker_mapping_df["name"].to_list()))
 fig_raw, raw_data_dict = plot_all_assets_raw_data()
 

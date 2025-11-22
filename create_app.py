@@ -6,6 +6,20 @@ from bt_layout import overall_bt_layout
 from pricing_layout import overall_pricing_layout
 from pricing_callbacks import get_pricing_callbacks
 from example import get_bt_graph
+from numba_test import print_benchmarking_results
+import platform
+import os
+import sys
+
+def print_system_info():
+    print("Platform:", platform.platform())
+    print("System:", platform.system())
+    print("Architecture:", platform.architecture())
+    print("Python Version:", sys.version)
+    print("Processor:", platform.processor())
+    print("CPU Count:", os.cpu_count())
+    # print("Environment Variables:", dict(os.environ))
+
 
 def create_app():
     app = Dash(
@@ -35,11 +49,10 @@ def create_app():
             return overall_bt_layout
     app = get_pricing_callbacks(app)
     app = get_bt_callbacks(app)
+    # print_system_info()
+    print_benchmarking_results()
     return app
 
 if __name__ == "__main__":
-    import os
-    credential_path = "C:\\Users\\abhir\\Downloads\\stone-goal-401904-364eb9bc2e42.json"
-    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credential_path
     app = create_app()
     app.run_server(debug=False)
