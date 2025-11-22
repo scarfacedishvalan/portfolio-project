@@ -1,37 +1,21 @@
 import dash
-from dash import Dash, dcc, html, dash_table, Input, Output, State, callback_context, ALL, no_update
-from dash.dependencies import Input, Output
-import dash_bootstrap_components as dbc
-from texts import get_text_content
-from bt_layout import ALL_CARDS_DICT, HEADINGS_DICT
-from base_layout_components import metas, app_title
-from bt_callbacks import get_bt_callbacks
-from bt_layout import overall_bt_layout
-from pricing_layout import overall_pricing_layout
-from pricing_callbacks import get_pricing_callbacks
+from dash import html
+from dash_extensions import Lottie
+import json
+# Create Dash app
+app = dash.Dash(__name__)
 
-app = Dash(__name__)
-
+# Layout with a looping Lottie animation
 app.layout = html.Div([
-    # represents the browser address bar and doesn't render anything
-    dcc.Location(id='url', refresh=False),
-
-    # dcc.Link('Navigate to "/"', href='/'),
-    # html.Br(),
-    # dcc.Link('Navigate to "/page-2"', href='/page-2'),
-
-    # content will be rendered in this element
-    html.Div(id='page-content', children = overall_bt_layout)
+    Lottie(
+        options=dict(loop=True, autoplay=True),
+        width="25%",
+        height="25%",
+        # url="https://assets1.lottiefiles.com/packages/lf20_jcikwtux.json"
+        url="/assets/flowchart2.json"
+    )
 ])
 
-
-@app.callback(Output('page-content', 'children'), Input('url', 'pathname'))
-def display_page(pathname):
-    if pathname == "/assetalloc":
-        return overall_pricing_layout
-    else:
-        return overall_bt_layout
-
-
-if __name__ == '__main__':
-    app.run(debug=True)
+# Run the app
+if __name__ == "__main__":
+    app.run(debug=True)  # ✅ new method

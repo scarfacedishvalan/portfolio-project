@@ -54,8 +54,5 @@ def create_app():
     return app
 
 if __name__ == "__main__":
-    import os
-    credential_path = "C:\\Users\\abhir\\Downloads\\stone-goal-401904-364eb9bc2e42.json"
-    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credential_path
     app = create_app()
     app.run_server(debug=False)

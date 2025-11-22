@@ -1,4 +1,35 @@
 import dash_bootstrap_components as dbc
+import numpy as np
+from numba import njit, prange, get_num_threads
+import time
+import pandas as pd
+
+
+@njit(parallel=True)
+def monte_carlo_vasicek_numba(a, b, sigma, r0, T, N, M):
+    dt = T / N
+    rates = np.zeros((M, N + 1))
+    
+    for i in prange(M):
+        rates[i, 0] = r0
+        for t in range(1, N + 1):
+            z = np.random.randn()
+            rates[i, t] = rates[i, t - 1] + a * (b - rates[i, t - 1]) * dt + sigma  * np.sqrt(rates[i, t - 1]) * z * np.sqrt(dt)
+            
+    return rates
+
+@njit(parallel=True)
+def monte_carlo_cir_numba(a, b, sigma, r0, T, N, M):
+    dt = T / N
+    rates = np.zeros((M, N + 1))
+    
+    for i in prange(M):
+        rates[i, 0] = r0
+        for t in range(1, N + 1):
+            z = np.random.randn()
+            rates[i, t] = rates[i, t - 1] + a * (b - rates[i, t - 1]) * dt + sigma * np.sqrt(dt) * z
+            
+    return rates
 
 def render_model_inputs(model_name):
     params = model_config.get(model_name, {}).get("parameters", [])
@@ -45,6 +76,11 @@ model_config = {
         ]
     }
 }
+
+model_names = {"vasicek": "Vasicek", "cir" : "Cox Ingleson Ross", "hw": "Hull White"}
+
+
+
 
 # Platform: Linux-6.12.12+bpo-cloud-amd64-x86_64-with-glibc2.31
 # Architecture: ('64bit', 'ELF')
